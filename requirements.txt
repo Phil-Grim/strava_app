@@ -1,3 +1,4 @@
 requests_oauthlib
 dotenv
 os
+python-dotenv
