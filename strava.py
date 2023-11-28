@@ -5,7 +5,7 @@ import arrow
 import httpx
 import streamlit as st
 
-APP_URL = "https://localhost"
+APP_URL = "https://stravaapp-5jhpgdn9kfmhmkdy5d5yrs.streamlit.app/"
 STRAVA_CLIENT_ID = "106698"
 STRAVA_CLIENT_SECRET = "a66bb23d9597d2b4027ff22a73720f226d021f68"
 STRAVA_AUTHORIZATION_URL = "https://www.strava.com/oauth/authorize"
