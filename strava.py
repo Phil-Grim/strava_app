@@ -21,6 +21,19 @@ def header():
 
     return col1, col2, col3, strava_button
 
+@st.cache(show_spinner=False)
+def load_image_as_base64(image_path):
+    with open(image_path, "rb") as f:
+        contents = f.read()
+    return base64.b64encode(contents).decode("utf-8")
+
+def powered_by_strava_logo():
+    base64_image = load_image_as_base64("./static/api_logo_pwrdBy_strava_horiz_light.png")
+    st.markdown(
+        f'<img src="data:image/png;base64,{base64_image}" width="100%" alt="powered by strava">',
+        unsafe_allow_html=True,
+    )
+
 def authorization_url():
     request = httpx.Request(
         method="GET",
@@ -57,6 +70,58 @@ def login_header(header=None):
         ),
         unsafe_allow_html=True,
     )
+
+def logout_header(header=None):
+    if header is None:
+        base = st
+    else:
+        _, col2, _, button = header
+        base = button
+
+
+    with col2:
+        powered_by_strava_logo()
+
+    if base.button("Log out"):
+        js = f"window.location.href = '{APP_URL}'"
+        html = f"<img src onerror=\"{js}\">"
+        div = Div(text=html)
+        st.bokeh_chart(div)
+
+def logged_in_title(strava_auth, header=None):
+    if header is None:
+        base = st
+    else:
+        col, _, _, _ = header
+        base = col
+
+    first_name = strava_auth["athlete"]["firstname"]
+    last_name = strava_auth["athlete"]["lastname"]
+    col.markdown(f"*Welcome, {first_name} {last_name}!*")
+
+
+@st.cache(show_spinner=False, suppress_st_warning=True)
+def exchange_authorization_code(authorization_code):
+    response = httpx.post(
+        url="https://www.strava.com/oauth/token",
+        json={
+            "client_id": STRAVA_CLIENT_ID,
+            "client_secret": STRAVA_CLIENT_SECRET,
+            "code": authorization_code,
+            "grant_type": "authorization_code",
+        }
+    )
+    try:
+        response.raise_for_status()
+    except httpx.HTTPStatusError:
+        st.error("Something went wrong while authenticating with Strava. Please reload and try again")
+        st.experimental_set_query_params()
+        st.stop()
+        return
+
+    strava_auth = response.json()
+
+    return strava_auth
 
 def authenticate(header=None, stop_if_unauthenticated=True):
     query_params = st.experimental_get_query_params()
