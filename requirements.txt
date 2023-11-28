@@ -1,4 +1,3 @@
-stravalib
-fastapi
-uvicorn
-uvicorn Home:app --reload
+requests_oauthlib
+dotenv
+os
