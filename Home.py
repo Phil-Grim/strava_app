@@ -1,62 +1,44 @@
-import time
-import pickle
-from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
-from stravalib.client import Client
+import streamlit as st
+from requests_oauthlib import OAuth2Session
+from dotenv import load_dotenv
+import os
 
-CLIENT_ID = 'GET FROM STRAVA API SITE'
-CLIENT_SECRET = 'GET FROM STRAVA API SITE'
-REDIRECT_URL = 'http://localhost:8000/authorized'
+# Load environment variables
+load_dotenv()
 
-app = FastAPI()
-client = Client()
+# Set local id, secret, and redirect_url variables
+client_id = os.getenv('CLIENT_ID')
+client_secret = os.getenv('CLIENT_SECRET')
+redirect_url = "https://stravaapp-uim9kwpf6xntywbkf2yl85.streamlit.app/"
 
-def save_object(obj, filename):
-    with open(filename, 'wb') as output:  # Overwrites any existing file.
-        pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
+# Create session variable
+session = OAuth2Session(client_id=client_id, redirect_uri=redirect_url)
 
-def load_object(filename):
-    with open(filename, 'rb') as input:
-        loaded_object = pickle.load(input)
-        return loaded_object
+# Set auth url and scope variables
+auth_base_url = "https://www.strava.com/oauth/authorize"
+session.scope = ["profile:read_all"]
+auth_link = session.authorization_url(auth_base_url)
 
+# Print auth link and accept input
+print(f"Click Here: {auth_link[0]}")
+redirect_response = input(f"Paste redirect url here: ")
 
-def check_token():
-    if time.time() > client.token_expires_at:
-        refresh_response = client.refresh_access_token(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, refresh_token=client.refresh_token)
-        access_token = refresh_response['access_token']
-        refresh_token = refresh_response['refresh_token']
-        expires_at = refresh_response['expires_at']
-        client.access_token = access_token
-        client.refresh_token = refresh_token
-        client.token_expires_at = expires_at
+# Get oauth token
+token_url = "https://www.strava.com/api/v3/oauth/token"
+session.fetch_token(
+    token_url=token_url,
+    client_id=client_id,
+    client_secret=client_secret,
+    authorization_response=redirect_response,
+    include_client_id=True
+)
 
-@app.get("/")
-def read_root():
-    authorize_url = client.authorization_url(client_id=CLIENT_ID, redirect_uri=REDIRECT_URL)
-    return RedirectResponse(authorize_url)
+# Make request to protected resource
+response = session.get("https://www.strava.com/api/v3/athlete")
 
-
-@app.get("/authorized/")
-def get_code(state=None, code=None, scope=None):
-    token_response = client.exchange_code_for_token(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, code=code)
-    access_token = token_response['access_token']
-    refresh_token = token_response['refresh_token']
-    expires_at = token_response['expires_at']
-    client.access_token = access_token
-    client.refresh_token = refresh_token
-    client.token_expires_at = expires_at
-    save_object(client, 'client.pkl')
-    return {"state": state, "code": code, "scope": scope}
-
-try:
-    client = load_object('client.pkl')
-    check_token()
-    athlete = client.get_athlete()
-    print("For {id}, I now have an access token {token}".format(id=athlete.id, token=client.access_token))
-
-    # To upload an activity
-    # client.upload_activity(activity_file, data_type, name=None, description=None, activity_type=None, private=None, external_id=None)
-except FileNotFoundError:
-    print("No access token stored yet, visit http://localhost:8000/ to get it")
-    print("After visiting that url, a pickle file is stored, run this file again to upload your activity")
+# Print response
+print("\n\n\n")
+print(f"Response Status: {response.status_code}")
+print(f"Response Reason: {response.reason}")
+print(f"Time Elaspsed: {response.elapsed}")
+print(f"Response Text: \n{'-'*15}\n{response.text}")
