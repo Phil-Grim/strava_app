@@ -7,3 +7,6 @@ st.set_page_config(
 )
 
 strava_header = strava.header()
+
+strava_auth = strava.authenticate(header=strava_header, stop_if_unauthenticated=False)
+
