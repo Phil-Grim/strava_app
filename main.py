@@ -5,4 +5,4 @@ st.set_page_config(
     page_icon=":circus_tent:",
 )
 
-strava_header  strava.header()
+strava_header = strava.header()
