@@ -4,8 +4,6 @@ import os
 import arrow
 import httpx
 import streamlit as st
-import sweat
-from bokeh.models.widgets import Div
 
 APP_URL = "https://stravaapp-5jhpgdn9kfmhmkdy5d5yrs.streamlit.app/"
 STRAVA_CLIENT_ID = "106698"
