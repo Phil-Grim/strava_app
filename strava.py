@@ -228,6 +228,25 @@ def convert_json_to_df(activities):
     activities_df['Max Speed'] = 1/(activities_df['Max Speed']*(60/1000))
     activities_df['Distance (km)'] = activities_df['Distance']
 
+    # Using above functions to format ave/max speed and moving time
+    formatted_speed = []
+    for index, row in activities_df.iterrows():
+        formatted_speed.append(frmt(row['Average Speed']))
+    
+    formatted_max_speed = []
+    for index, row in activities_df.iterrows():
+        formatted_max_speed.append(frmt(row['Max Speed']))
+        
+    formatted_moving_time = []
+    for index, row in activities_df.iterrows():
+        formatted_moving_time.append(frmt(row['Moving Time']))
+    
+    activities_df['Average Speed (min/km)'] = formatted_speed
+    activities_df['Max Speed (min/km)'] = formatted_max_speed
+    activities_df['Moving Time'] = formatted_moving_time
+
+    activities_df = activities_df[['Name', 'Date', 'Distance', 'Moving Time', 'Elevation Gain', 'Average Speed (min/km)', 'Max Speed (min/km)', 'Average HR', 'Max HR']]
+
     return activities_df
 
 def filter_activities_from_slider(activities_df, start_time_slider):
