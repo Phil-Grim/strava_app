@@ -187,7 +187,7 @@ def activities_slider(activities_df):
     min_date = datetime.strptime(activities_df['Date'].iloc[0],'%Y-%m-%d')
     max_date = datetime.strptime(activities_df['Date'].iloc[-1],'%Y-%m-%d')
 
-    start_time = streamlit.slider(
+    start_time = st.slider(
     "Date picker",
     min_date,
     max_date,
