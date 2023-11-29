@@ -188,10 +188,7 @@ def convert_json_to_df(activities):
     for i in activities:
         if i['sport_type'] == 'Run':
             activity_url = f"https://www.strava.com/activities/{i['id']}"
-            markdown_link =     st.markdown(
-                f"<a href=\"{activity_url}\" style=\"color:{STRAVA_ORANGE};\">View on Strava</a>",
-                unsafe_allow_html=True
-                )
+            markdown_link = f"<a href=\"{activity_url}\" style=\"color:{STRAVA_ORANGE};\">View on Strava</a>"
             date_distance_list.append([i['id'], markdown_link, i['name'], i['start_date'][:10], i['distance'], i['moving_time'], i['total_elevation_gain'], i['end_latlng'], i['average_speed'], i['max_speed']])
             try:
                 date_distance_list[count].append(i['average_heartrate'])
