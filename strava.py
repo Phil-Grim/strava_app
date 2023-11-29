@@ -178,8 +178,8 @@ def convert_json_to_df(activities):
             
     activities_df = pd.DataFrame(date_distance_list, columns = ['ID', 'Name', 'Date', 'Distance', 'Moving Time', 'Elevation Gain', 'End Location', 'Average Speed', 'Max Speed', 'Average HR', 'Max HR'])
     activities_df.sort_values(by='Date', inplace=True)
-    activities_df['Distance'] = pd.to_numeric(activities['Distance'])
-    activities_df['Distance'] = activities['Distance']/1000
+    activities_df['Distance'] = pd.to_numeric(activities_df['Distance'])
+    activities_df['Distance'] = activities_df['Distance']/1000
     return activities_df
 
 def activities_slider(activities_df):
