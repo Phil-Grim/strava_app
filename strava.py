@@ -143,3 +143,18 @@ def authenticate(header=None, stop_if_unauthenticated=True):
         st.experimental_set_query_params(session=authorization_code)
 
         return strava_auth
+
+@st.cache(show_spinner=False)
+def get_activities(auth, page=1):
+    access_token = auth["access_token"]
+    response = httpx.get(
+        url=f"{STRAVA_API_BASE_URL}/athlete/activities",
+        params={
+            "page": page,
+        },
+        headers={
+            "Authorization": f"Bearer {access_token}",
+        },
+    )
+
+    return response.json()
