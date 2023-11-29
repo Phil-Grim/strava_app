@@ -255,7 +255,7 @@ def filter_activities_from_slider(activities_df, start_time_slider):
 
 
 def adding_headline_numbers(activities_df):
-    week_distance = round(activities_df['Distance'].sum(), 1)
+    week_distance = round(activities_df['Distance (km)'].sum(), 1)
     return week_distance
     # make this recursive
 
