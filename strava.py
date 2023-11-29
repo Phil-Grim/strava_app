@@ -203,6 +203,7 @@ def convert_json_to_df(activities):
             
     activities_df = pd.DataFrame(date_distance_list, columns = ['ID', 'Link to Activity', 'Name', 'Date', 'Distance', 'Moving Time', 'Elevation Gain', 'End Location', 'Average Speed', 'Max Speed', 'Average HR', 'Max HR'])
     activities_df.sort_values(by='Date', inplace=True)
+    activities_df['Date'] = pd.to_datetime(activities_df['Date'], format='%Y-%m-%d')
     # activities_df['Link to Activity'] = activities_df.apply(lambda x: make_clickable(x['Link to Activity'], x['Link to Activity']), axis=1)
     activities_df['Distance'] = pd.to_numeric(activities_df['Distance'])
     activities_df['Distance'] = activities_df['Distance']/1000
@@ -210,7 +211,6 @@ def convert_json_to_df(activities):
     return activities_df.style
 
 def filter_activities_from_slider(activities_df, start_time_slider):
-    activities_df['Date'] = pd.to_datetime(activities_df['Date'], format='%Y-%m-%d')
     filtered_df = activities_df.loc[(activities_df['Date'] >= start_time_slider[0]) & (activities_df['Date'] <= start_time_slider[1])]
     return filtered_df
 
