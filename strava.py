@@ -208,11 +208,11 @@ def convert_json_to_df(activities):
     activities_df['Distance'] = pd.to_numeric(activities_df['Distance'])
     activities_df['Distance'] = activities_df['Distance']/1000
 
-    return activities_df.style
+    return activities_df
 
 def filter_activities_from_slider(activities_df, start_time_slider):
     filtered_df = activities_df.loc[(activities_df['Date'] >= start_time_slider[0]) & (activities_df['Date'] <= start_time_slider[1])]
-    return filtered_df
+    return filtered_df.style
 
 
 
