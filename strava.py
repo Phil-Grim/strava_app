@@ -1,6 +1,6 @@
 import base64
 import os
-
+import pandas as pd
 import arrow
 import httpx
 import streamlit as st
