@@ -172,10 +172,11 @@ def activities_slider(activities):
     max_date = datetime.strptime(activities[-1]['start_date'][:10],'%Y-%m-%d')
     
     start_time = st.slider(
-    "Date picker",
+    "Select a date",
     min_date,
     max_date,
-    value=[min_date, max_date]
+    value=[min_date, max_date],
+    help='select a date range to filter the table of your strava activities"
     )
 
     return start_time
