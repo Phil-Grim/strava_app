@@ -16,7 +16,7 @@ if strava_auth is None:
     # st.stop
     # st.exception("Please login!")
 else:
-    st.success("Thanks for logging in")
+    # st.success("Thanks for logging in")
     json_activities = strava.get_activities(strava_auth)
     # st.json(json_activities)
 
