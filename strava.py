@@ -251,7 +251,7 @@ def convert_json_to_df(activities):
 
 def filter_activities_from_slider(activities_df, start_time_slider):
     filtered_df = activities_df.loc[(activities_df['Date'] >= start_time_slider[0]) & (activities_df['Date'] <= start_time_slider[1])]
-    return filtered_df.style
+    return filtered_df
 
 
 
