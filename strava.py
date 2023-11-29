@@ -180,7 +180,7 @@ def activities_slider(activities):
 
     return start_time
 
-def convert_json_to_df_and_filter(activities):
+def convert_json_to_df(activities):
     date_distance_list = []
     count = 0
     for i in activities:
