@@ -161,7 +161,7 @@ def get_activities(auth,page=1):
     return response.json()
 
 
-##### Take Json and extract into a cleaned table 
+##### Take Json, add a slider and extract json into a cleaned table 
 
 
 def activities_slider(activities):
@@ -180,7 +180,7 @@ def activities_slider(activities):
 
     return start_time
 
-def convert_json_to_df(activities):
+def convert_json_to_df_and_filter(activities):
     date_distance_list = []
     count = 0
     for i in activities:
@@ -198,7 +198,13 @@ def convert_json_to_df(activities):
     activities_df.sort_values(by='Date', inplace=True)
     activities_df['Distance'] = pd.to_numeric(activities_df['Distance'])
     activities_df['Distance'] = activities_df['Distance']/1000
+
     return activities_df
+
+def filter_activities_from_slider(activities_df):
+    activities_df['Date'] = pd.to_datetime(activities_df['Date'], format='%Y-%m-%d')
+    filtered_df = activities.loc[(activities['Date'] >= start_time[0]) & (activities['Date'] <= start_time[1])]
+    return filtered_df
 
 
 
