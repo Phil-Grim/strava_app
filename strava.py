@@ -176,7 +176,7 @@ def activities_slider(activities):
     min_date,
     max_date,
     value=[min_date, max_date],
-    help='select a date range to filter the table of your strava activities"
+    help='select a date range to filter the table of your strava activities'
     )
 
     return start_time
