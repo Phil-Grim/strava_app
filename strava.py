@@ -188,8 +188,7 @@ def convert_json_to_df(activities):
     for i in activities:
         if i['sport_type'] == 'Run':
             activity_url = f"https://www.strava.com/activities/{i['id']}"
-            markdown_link = f"<a href=\"{activity_url}\" style=\"color:{STRAVA_ORANGE};\">View on Strava</a>"
-            date_distance_list.append([i['id'], markdown_link, i['name'], i['start_date'][:10], i['distance'], i['moving_time'], i['total_elevation_gain'], i['end_latlng'], i['average_speed'], i['max_speed']])
+            date_distance_list.append([i['id'], activity_url, i['name'], i['start_date'][:10], i['distance'], i['moving_time'], i['total_elevation_gain'], i['end_latlng'], i['average_speed'], i['max_speed']])
             try:
                 date_distance_list[count].append(i['average_heartrate'])
                 date_distance_list[count].append(i['max_heartrate'])
@@ -198,7 +197,7 @@ def convert_json_to_df(activities):
                 date_distance_list[count].append('None')
             count += 1
             
-    activities_df = pd.DataFrame(date_distance_list, columns = ['ID', 'Link', 'Name', 'Date', 'Distance', 'Moving Time', 'Elevation Gain', 'End Location', 'Average Speed', 'Max Speed', 'Average HR', 'Max HR'])
+    activities_df = pd.DataFrame(date_distance_list, columns = ['ID', 'Link to Activity', 'Name', 'Date', 'Distance', 'Moving Time', 'Elevation Gain', 'End Location', 'Average Speed', 'Max Speed', 'Average HR', 'Max HR'])
     activities_df.sort_values(by='Date', inplace=True)
     activities_df['Distance'] = pd.to_numeric(activities_df['Distance'])
     activities_df['Distance'] = activities_df['Distance']/1000
