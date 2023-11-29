@@ -174,8 +174,8 @@ def activities_slider(activities):
     
     start_time = st.slider(
     "Select a date",
-    min_date,
-    max_date,
+    min_date.dt.date,
+    max_date.dt.date,
     value=[min_date, max_date],
     help='Filter your strava activities by date. This will also change the headline statistics'
     )
