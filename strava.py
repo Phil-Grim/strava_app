@@ -186,6 +186,21 @@ def activities_slider(activities):
 def make_clickable(url, name):
     return '<a href="{}" rel="noopener noreferrer" target="_blank">{}</a>'.format(url,name)
 
+# functions to format average speed to a minutes / seconds format
+def frac(n):
+    i = int(n)
+    f = round((n - int(n)), 4)
+    return (i, f)
+
+def frmt(min):
+    minutes, _sec = frac(min)
+    seconds, _msecs = frac(_sec*60)
+    if seconds > 9:
+        return "%s:%s"%(minutes, seconds)
+    else:
+        return "%s:0%s"%(minutes, seconds)
+
+
 def convert_json_to_df(activities):
     date_distance_list = []
     count = 0
@@ -208,11 +223,18 @@ def convert_json_to_df(activities):
     activities_df['Distance'] = pd.to_numeric(activities_df['Distance'])
     activities_df['Distance'] = activities_df['Distance']/1000
 
+    activities_df['Moving Time'] = activities_df['Moving Time']/60 # moving time is now in mins
+    activities_df['Average Speed'] = 1/(activities_df['Average Speed']*(60/1000))
+    activities_df['Max Speed'] = 1/(activities_df['Max Speed']*(60/1000))
+    activities_df['Distance (km)'] = activities_df['Distance']
+
     return activities_df
 
 def filter_activities_from_slider(activities_df, start_time_slider):
     filtered_df = activities_df.loc[(activities_df['Date'] >= start_time_slider[0]) & (activities_df['Date'] <= start_time_slider[1])]
     return filtered_df.style
+
+def
 
 
 
