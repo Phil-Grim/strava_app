@@ -22,7 +22,7 @@ else:
 
     slider = strava.activities_slider(json_activities)
     activity_table = strava.convert_json_to_df(json_activities)
-    filtered_table = strava.filter_activities_from_slider(activity_table)
+    filtered_table = strava.filter_activities_from_slider(activity_table, slider)
     
     st.dataframe(filtered_table)
 
