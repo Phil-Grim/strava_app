@@ -5,7 +5,6 @@ import arrow
 import httpx
 import streamlit as st
 from datetime import datetime, timedelta
-import datetime
 from bokeh.models.widgets import Div
 
 APP_URL = "https://stravaapp-5jhpgdn9kfmhmkdy5d5yrs.streamlit.app/"
