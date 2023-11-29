@@ -201,9 +201,9 @@ def convert_json_to_df(activities):
 
     return activities_df
 
-def filter_activities_from_slider(activities_df):
+def filter_activities_from_slider(activities_df, start_time_slider):
     activities_df['Date'] = pd.to_datetime(activities_df['Date'], format='%Y-%m-%d')
-    filtered_df = activities_df.loc[(activities_df['Date'] >= start_time[0]) & (activities_df['Date'] <= start_time[1])]
+    filtered_df = activities_df.loc[(activities_df['Date'] >= start_time_slider[0]) & (activities_df['Date'] <= start_time_slider[1])]
     return filtered_df
 
 
