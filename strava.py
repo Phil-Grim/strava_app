@@ -158,3 +158,45 @@ def get_activities(auth, page=1):
     )
 
     return response.json()
+
+
+##### Take Json and extract into a cleaned table 
+
+def convert_json_to_df(activities):
+    date_distance_list = []
+    count = 0
+    for i in activities:
+        if i['sport_type'] == 'Run':
+            date_distance_list.append([i['id'], i['name'], i['start_date'][:10], i['distance'], i['moving_time'], i['total_elevation_gain'], i['end_latlng'], i['average_speed'], i['max_speed']])
+            try:
+                date_distance_list[count].append(i['average_heartrate'])
+                date_distance_list[count].append(i['max_heartrate'])
+            except:
+                date_distance_list[count].append('None')
+                date_distance_list[count].append('None')
+            count += 1
+            
+    activities_df = pd.DataFrame(date_distance_list, columns = ['ID', 'Name', 'Date', 'Distance', 'Moving Time', 'Elevation Gain', 'End Location', 'Average Speed', 'Max Speed', 'Average HR', 'Max HR'])
+    activities_df.sort_values(by='Date', inplace=True)
+    activities_df['Distance'] = pd.to_numeric(activities['Distance'])
+    activities_df['Distance'] = activities['Distance']/1000
+    return activities_df
+
+def activities_slider(activities_df):
+    min_date = datetime.strptime(activities_df['Date'].iloc[0],'%Y-%m-%d')
+    max_date = datetime.strptime(activities_df['Date'].iloc[-1],'%Y-%m-%d')
+
+    start_time = streamlit.slider(
+    "Date picker",
+    min_date,
+    max_date,
+    value=[min_date, max_date]
+    )
+
+    return start_time
+
+
+
+
+
+    
