@@ -14,7 +14,7 @@ if strava_auth is None:
     st.markdown("Use the **Connect with Strava** button at the top of the screen to login!")
     st.warning('Please login!')
     st.stop # stop the rest of the script running - which requires a non-None strava_auth value
-
-json_activities = strava.get_activities(strava_auth)
-st.json(json_activities)
+else:
+    json_activities = strava.get_activities(strava_auth)
+    st.json(json_activities)
 
