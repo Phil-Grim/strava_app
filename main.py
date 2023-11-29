@@ -13,5 +13,6 @@ strava_auth = strava.authenticate(header=strava_header, stop_if_unauthenticated=
 if strava_auth = None:
     st.markdown("Use the **Connect with Strava** button at the top of the screen to login!")
 
-strava.get_activities(strava_auth)
+json_activities = strava.get_activities(strava_auth)
+st.json(json_activities)
 
