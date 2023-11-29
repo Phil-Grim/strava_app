@@ -10,20 +10,20 @@ strava_header = strava.header()
 
 strava_auth = strava.authenticate(header=strava_header, stop_if_unauthenticated=False)
 
-# if strava_auth is None:
-#     st.markdown("Use the **Connect with Strava** button at the top of the screen to login!")
-#     st.warning('Please login!')
-#     # st.stop
-#     st.exception("Please login!")
-# else:
-#     st.success("Thanks for logging in")
-#     json_activities = strava.get_activities(strava_auth)
-#     st.json(json_activities)
-
-try:
-    strava_auth is not None
+if strava_auth is None:
+    st.markdown("Use the **Connect with Strava** button at the top of the screen to login!")
+    st.warning('Please login!')
+    # st.stop
+    # st.exception("Please login!")
+else:
+    st.success("Thanks for logging in")
     json_activities = strava.get_activities(strava_auth)
     st.json(json_activities)
-except:
-    st.exception("Please login!")
+
+# try:
+#     strava_auth is not None
+#     json_activities = strava.get_activities(strava_auth)
+#     st.json(json_activities)
+# except:
+#     st.exception("Please login!")
 
