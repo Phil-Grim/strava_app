@@ -15,6 +15,7 @@ if strava_auth is None:
     st.warning('Please login!')
     st.stop # stop the rest of the script running - which requires a non-None strava_auth value
 else:
+    st.success("Thanks for logging in")
     json_activities = strava.get_activities(strava_auth)
     st.json(json_activities)
 
