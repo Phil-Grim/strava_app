@@ -245,7 +245,7 @@ def convert_json_to_df(activities):
     activities_df['Max Speed (min/km)'] = formatted_max_speed
     activities_df['Moving Time'] = formatted_moving_time
 
-    activities_df = activities_df[['Name', 'Date', 'Distance (km)', 'Moving Time (mins)', 'Elevation Gain (m)', 'Average Speed (min/km)', 'Max Speed (min/km)', 'Average HR', 'Max HR']]
+    activities_df = activities_df[['Name', 'Link to Activity' 'Date', 'Distance (km)', 'Moving Time (mins)', 'Elevation Gain (m)', 'Average Speed (min/km)', 'Max Speed (min/km)', 'Average HR', 'Max HR']]
 
     return activities_df
 
