@@ -163,6 +163,21 @@ def get_activities(auth, page=1):
 
 ##### Take Json and extract into a cleaned table 
 
+
+def activities_slider(activities):
+    # using min and max start date from get_activities output (the json of all strava activities for the user) 
+    min_date = datetime.strptime(activities['start_date'].iloc[0][:10],'%Y-%m-%d')
+    max_date = datetime.strptime(activities['start_date'].iloc[-1][:10],'%Y-%m-%d')
+
+    start_time = st.slider(
+    "Date picker",
+    min_date,
+    max_date,
+    value=[min_date, max_date]
+    )
+
+    return start_time
+
 def convert_json_to_df(activities):
     date_distance_list = []
     count = 0
@@ -183,18 +198,7 @@ def convert_json_to_df(activities):
     activities_df['Distance'] = activities_df['Distance']/1000
     return activities_df
 
-def activities_slider(activities_df):
-    min_date = datetime.strptime(activities_df['Date'].iloc[0],'%Y-%m-%d')
-    max_date = datetime.strptime(activities_df['Date'].iloc[-1],'%Y-%m-%d')
 
-    start_time = st.slider(
-    "Date picker",
-    min_date,
-    max_date,
-    value=[min_date, max_date]
-    )
-
-    return start_time
 
 
 
