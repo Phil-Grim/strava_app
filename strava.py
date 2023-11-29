@@ -5,6 +5,7 @@ import arrow
 import httpx
 import streamlit as st
 from datetime import datetime, timedelta
+import datetime
 from bokeh.models.widgets import Div
 
 APP_URL = "https://stravaapp-5jhpgdn9kfmhmkdy5d5yrs.streamlit.app/"
@@ -173,7 +174,7 @@ def activities_slider(activities):
     max_date = datetime.date(datetime.strptime(activities[-1]['start_date'][:10],'%Y-%m-%d'))
     
     start_time = st.slider(
-    "Select a date",
+    "Select a date range",
     min_date,
     max_date,
     value=[min_date, max_date],
@@ -252,6 +253,12 @@ def convert_json_to_df(activities):
 def filter_activities_from_slider(activities_df, start_time_slider):
     filtered_df = activities_df.loc[(activities_df['Date'] >= start_time_slider[0]) & (activities_df['Date'] <= start_time_slider[1])]
     return filtered_df
+
+
+def adding_headline_numbers(activities_df):
+    week_distance = round(activities_df['Distance'].sum(), 1)
+    return week_distance
+    # make this recursive
 
 
 
