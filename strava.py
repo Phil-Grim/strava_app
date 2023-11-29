@@ -13,6 +13,7 @@ STRAVA_CLIENT_SECRET = "a66bb23d9597d2b4027ff22a73720f226d021f68"
 STRAVA_AUTHORIZATION_URL = "https://www.strava.com/oauth/authorize"
 STRAVA_API_BASE_URL = "https://www.strava.com/api/v3"
 DEFAULT_ACTIVITY_LABEL = "NO_ACTIVITY_SELECTED"
+STRAVA_ORANGE = "#fc4c02"
 
 
 def header():
