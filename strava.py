@@ -146,13 +146,10 @@ def authenticate(header=None, stop_if_unauthenticated=True):
         return strava_auth
 
 @st.cache(show_spinner=False)
-def get_activities(auth, page=1):
+def get_activities(auth):
     access_token = auth["access_token"]
     response = httpx.get(
         url=f"{STRAVA_API_BASE_URL}/athlete/activities",
-        params={
-            "page": page,
-        },
         headers={
             "Authorization": f"Bearer {access_token}",
         },
