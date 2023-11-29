@@ -169,8 +169,8 @@ def activities_slider(activities):
     # using min and max start date from get_activities output (the json of all strava activities for the user) 
     # min_date = datetime.strptime(activities['start_date'].iloc[0][:10],'%Y-%m-%d')
     # max_date = datetime.strptime(activities['start_date'].iloc[-1][:10],'%Y-%m-%d')
-    min_date = datetime.strptime(activities[0]['start_date'][:10],'%Y-%m-%d')
-    max_date = datetime.strptime(activities[-1]['start_date'][:10],'%Y-%m-%d')
+    min_date = datetime.date(datetime.strptime(activities[0]['start_date'][:10],'%Y-%m-%d'))
+    max_date = datetime.date(datetime.strptime(activities[-1]['start_date'][:10],'%Y-%m-%d'))
     
     start_time = st.slider(
     "Select a date",
