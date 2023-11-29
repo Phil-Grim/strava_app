@@ -20,8 +20,9 @@ else:
     json_activities = strava.get_activities(strava_auth)
     st.json(json_activities)
 
+    slider = strava.activities_slider(json_activities)
     activity_table = strava.convert_json_to_df(json_activities)
-    slider = strava.activities_slider(activity_table)
+    
 
     st.dataframe(activity_table)
 
