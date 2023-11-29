@@ -33,7 +33,6 @@ else:
     st.dataframe(filtered_table)
 
     st.header("Headline Numbers")
-    st.write("for the selected date range")
     distance = strava.adding_headline_numbers(filtered_table)
     st.write('You ran', distance, 'kms during the specified date range')
 
