@@ -25,6 +25,9 @@ else:
     slider = strava.activities_slider(json_activities)
     activity_table = strava.convert_json_to_df(json_activities)
     filtered_table = strava.filter_activities_from_slider(activity_table, slider)
-    
-    st.dataframe(filtered_table)
+
+
+    filtered_table = filtered_table.to_html(escape=False)
+    st.write(filtered_table,unsafe_allow_html=True)
+    # st.dataframe(filtered_table)
 
