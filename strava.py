@@ -201,7 +201,7 @@ def convert_json_to_df(activities):
                 date_distance_list[count].append('None')
             count += 1
             
-    activities_df = pd.DataFrame(date_distance_list, columns = ['ID', 'Name', 'Date', 'Distance', 'Moving Time', 'Elevation Gain', 'End Location', 'Average Speed', 'Max Speed', 'Average HR', 'Max HR'])
+    activities_df = pd.DataFrame(date_distance_list, columns = ['ID', 'Link', 'Name', 'Date', 'Distance', 'Moving Time', 'Elevation Gain', 'End Location', 'Average Speed', 'Max Speed', 'Average HR', 'Max HR'])
     activities_df.sort_values(by='Date', inplace=True)
     activities_df['Distance'] = pd.to_numeric(activities_df['Distance'])
     activities_df['Distance'] = activities_df['Distance']/1000
