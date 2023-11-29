@@ -30,5 +30,5 @@ else:
     # filtered_table = filtered_table.to_html(escape=False)
     # st.write(filtered_table,unsafe_allow_html=True)
     
-    st.dataframe(filtered_table)
+    st.dataframe(filtered_table.style.format("{:.2%}"))
 
