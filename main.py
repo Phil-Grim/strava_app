@@ -30,7 +30,7 @@ else:
     # filtered_table = filtered_table.to_html(escape=False)
     # st.write(filtered_table,unsafe_allow_html=True)
     
-    st.dataframe(filtered_table)
+    st.dataframe(filtered_table, column_config={"Link to Activity": st.column_config.LinkColumn()})
 
     st.header("Headline Numbers")
     distance = strava.adding_headline_numbers(filtered_table)
