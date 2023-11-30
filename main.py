@@ -69,10 +69,12 @@ else:
             patch.set_facecolor('red')
 
     bin_centers = 0.5 * np.diff(bins) + bins[:-1]
+    max_height = max([x.get_height() for x in patches])
+    raw_count_ann = max_height * 4/107
     for count, x, patch in zip(counts, bin_centers, patches):
         # Label the raw counts
         ax.annotate(str(count), xy=(x, 0), xycoords=('data', 'axes fraction'),
-            xytext=(0,patch.get_height()+4), textcoords=('offset points', 'data'), va='top', ha='center')
+            xytext=(0,patch.get_height()+raw_count_ann), textcoords=('offset points', 'data'), va='top', ha='center')
         
         # Label the percentages
         percent = '%0.0f%%' % (100 * float(count) / counts.sum())
