@@ -42,8 +42,11 @@ else:
     distance = strava.adding_headline_numbers(filtered_table)
     st.write('You ran', distance, 'kms during the specified date range')
 
+    ########### Adding Histogram - functionalise this in strava.py later    
     fig, ax = plt.subplots()
-    ax.hist(filtered_table['Distance (km)'], 5)
+    ax.set_facecolor('#eafff5')
+    w=5
+    counts, bins, patches = ax.hist(data, bins=np.arange(0, max(table['Distance']) + w, w), rwidth=1, facecolor='yellow', edgecolor='black')
     st.pyplot(fig)
 
     
