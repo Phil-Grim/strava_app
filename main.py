@@ -68,13 +68,15 @@ else:
         elif leftside > seventyfifth:
             patch.set_facecolor('red')
 
+    # 2 lines to get y-coordinate for placement of raw count label
+    max_height = max([x.get_height() for x in patches]) # height of tallest histogram bin
+    raw_count_ann_place = patch.get_height() + (max_height * 4/107) 
+    
     bin_centers = 0.5 * np.diff(bins) + bins[:-1]
-    max_height = max([x.get_height() for x in patches])
-    raw_count_ann = max_height * 4/107
     for count, x, patch in zip(counts, bin_centers, patches):
         # Label the raw counts
         ax.annotate(str(count), xy=(x, 0), xycoords=('data', 'axes fraction'),
-            xytext=(0,patch.get_height()+raw_count_ann), textcoords=('offset points', 'data'), va='top', ha='center')
+            xytext=(0,raw_count_ann), textcoords=('offset points', 'data'), va='top', ha='center')
         
         # Label the percentages
         percent = '%0.0f%%' % (100 * float(count) / counts.sum())
