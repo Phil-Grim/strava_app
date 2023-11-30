@@ -42,8 +42,8 @@ else:
     distance = strava.adding_headline_numbers(filtered_table)
     st.write('You ran', distance, 'kms during the specified date range')
 
-    fig = plt.hist(filtered_table['Distance (km)'], 5)
-    st.pyplot(fig)
+    plt.hist(filtered_table['Distance (km)'], 5)
+    plt.show()
 
     
 
