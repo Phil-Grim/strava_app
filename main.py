@@ -45,8 +45,10 @@ else:
     ########### Adding Histogram - functionalise this in strava.py later    
     fig, ax = plt.subplots()
     ax.set_facecolor('#eafff5')
+
+    data = filtered_table['Distance (km)']
     w=5
-    counts, bins, patches = ax.hist(data, bins=np.arange(0, max(table['Distance']) + w, w), rwidth=1, facecolor='yellow', edgecolor='black')
+    counts, bins, patches = ax.hist(data, bins=np.arange(0, max(data) + w, w), rwidth=1, facecolor='yellow', edgecolor='black')
     st.pyplot(fig)
 
     
