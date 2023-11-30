@@ -44,6 +44,7 @@ else:
     st.write('You ran', distance, 'kms during the specified date range')
 
     ########### Adding Histogram - functionalise this in strava.py later
+    from matplotlib.ticker import FormatStrFormatter # put here so I remember to move it into strava.py
     st.header("Run Distribution by Distance (kms)")
     
     fig, ax = plt.subplots()
