@@ -239,7 +239,7 @@ def convert_json_to_df(activities):
         
     formatted_moving_time = []
     for index, row in activities_df.iterrows():
-        formatted_moving_time.append(frmt(row['Moving Time']))
+        formatted_moving_time.append(frmt(row['Moving Time (mins)']))
     
     activities_df['Average Speed (min/km)'] = formatted_speed
     activities_df['Max Speed (min/km)'] = formatted_max_speed
