@@ -2,6 +2,7 @@ import strava
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 st.set_page_config(
     page_title="Streamlit Activity Viewer for Strava",
