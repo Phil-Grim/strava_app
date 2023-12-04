@@ -22,6 +22,7 @@ else:
     st.header("Strava Activities")
     
     json_activities = strava.get_activities(strava_auth, page=2)
+    st.json(json_activities)
     # json_activities_2 = strava.get_activities(strava_auth, page=2) # ADDED LINE - getting 2nd page of strava activities
     # st.json(json_activities)
 
