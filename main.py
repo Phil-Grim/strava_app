@@ -23,15 +23,12 @@ else:
     # st.success("Thanks for logging in")
     st.header("Strava Activities")
 
-    activities = [] # ADDED LINE
+    activities = []
     json_activities = strava.get_activities(strava_auth, page=1)
-    json_activities_2 = strava.get_activities(strava_auth, page=2) # ADDED LINE
+    json_activities_2 = strava.get_activities(strava_auth, page=2)
     activities.extend(json_activities)
     activities.extend(json_activities_2)
     st.json(activities)
-
-    # slider = strava.activities_slider(json_activities)
-    # activity_table = strava.convert_json_to_df(json_activities)
 
     slider = strava.activities_slider(activities)
     activity_table = strava.convert_json_to_df(activities) # ADDED LINE
@@ -48,7 +45,10 @@ else:
     distance = strava.adding_headline_numbers(filtered_table)
     st.write('You ran', distance, 'kms during the specified date range')
 
+    ##############################
     ########### Adding Histogram - functionalise this in strava.py later
+    ##############################
+    
     from matplotlib.ticker import FormatStrFormatter # put here so I remember to move it into strava.py
     st.header("Run Distribution by Distance (kms)")
     
