@@ -23,7 +23,7 @@ else:
     st.header("Strava Activities")
     
     json_activities = strava.get_activities(strava_auth, page=1)
-    json_activities_2 = strava.get_activities(strava_auth, pages=2) # ADDED LINE
+    json_activities_2 = strava.get_activities(strava_auth, page=2) # ADDED LINE
     st.json(json_activities)
 
     slider = strava.activities_slider(json_activities)
