@@ -21,20 +21,16 @@ else:
     # st.success("Thanks for logging in")
     st.header("Strava Activities")
     
-    json_activities = strava.get_activities(strava_auth)
-    json_activities_2 = strava.get_activities(strava_auth, page=2) # ADDED LINE - getting 2nd page of strava activities
+    json_activities = strava.get_activities(strava_auth, page=2)
+    # json_activities_2 = strava.get_activities(strava_auth, page=2) # ADDED LINE - getting 2nd page of strava activities
     # st.json(json_activities)
 
     slider = strava.activities_slider(json_activities)
     activity_table = strava.convert_json_to_df(json_activities)
-    activity_table_2 = strava.convert_json_to_df(json_activities_2) # ADDED LINE
-    activtiy_table = pd.concat([activity_table, activity_table_2]) # ADDED LINE
+    # activity_table_2 = strava.convert_json_to_df(json_activities_2) # ADDED LINE
+    # activtiy_table = pd.concat([activity_table, activity_table_2]) # ADDED LINE
     filtered_table = strava.filter_activities_from_slider(activity_table, slider)
 
-    # gives hyperlinks, but removes streamlit table formatting
-    # filtered_table = filtered_table.to_html(escape=False)
-    # st.write(filtered_table,unsafe_allow_html=True)
-    
     st.dataframe(
         filtered_table, 
         column_config={"Link to Activity": st.column_config.LinkColumn()
