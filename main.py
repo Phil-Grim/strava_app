@@ -11,6 +11,7 @@ st.set_page_config(
 strava_header = strava.header()
 
 strava_auth = strava.authenticate(header=strava_header, stop_if_unauthenticated=False)
+st.write(strava_auth)
 
 if strava_auth is None:
     st.markdown("Use the **Connect with Strava** button at the top of the screen to login!")
