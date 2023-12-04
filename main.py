@@ -23,13 +23,9 @@ else:
     
     json_activities = strava.get_activities(strava_auth, page=1)
     st.json(json_activities)
-    # json_activities_2 = strava.get_activities(strava_auth, page=2) # ADDED LINE - getting 2nd page of strava activities
-    # st.json(json_activities)
 
     slider = strava.activities_slider(json_activities)
     activity_table = strava.convert_json_to_df(json_activities)
-    # activity_table_2 = strava.convert_json_to_df(json_activities_2) # ADDED LINE
-    # activtiy_table = pd.concat([activity_table, activity_table_2]) # ADDED LINE
     filtered_table = strava.filter_activities_from_slider(activity_table, slider)
 
     st.dataframe(
