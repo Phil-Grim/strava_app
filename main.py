@@ -9,7 +9,8 @@ st.set_page_config(
     page_icon=":circus_tent:",
 )
 
-print(authenticate.authorization_url())
+url = authenticate.authorization_url()
+st.write(url)
 
 strava_header = authenticate.header()
 
