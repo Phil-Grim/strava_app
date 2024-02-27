@@ -141,11 +141,11 @@ def refresh_from_authentication(auth):
 def access_from_refresh(refresh_token):
     '''Generating Access Token from Refresh Token. 
     
-    Refresh token doesn't change, which allows me to include parameter inputs that won't change...
-    on analysis functions which use the httpx library. This allows for the effective use of the cache_data decorator...
-    to rate limit'''
+    Refresh token doesn't change, which allows me to include a parameter input on analysis functions (which send get requests)
+     that won't change when called for a given user. This allows for the effective use of the cache_data decorator
+     to rate limit'''
+    
     auth_url = "https://www.strava.com/oauth/token"
-
 
     payload = {
         'client_id': STRAVA_CLIENT_ID,

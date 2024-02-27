@@ -1,11 +1,14 @@
-# from strava.authenticate import *
-from strava.constants import *
 import httpx
 import streamlit as st
 
+from strava import authenticate
+from strava.constants import *
+
+
 
 @st.cache_data
-def athlete_id(access_token):
+def athlete_id(refresh_token):
+    access_token = authenticate.access_from_refresh(refresh_token)
     response = httpx.get(
         url=f"{STRAVA_API_BASE_URL}/athlete",
         headers={
@@ -17,7 +20,8 @@ def athlete_id(access_token):
     return id
 
 @st.cache_data
-def number_of_runs(access_token,id):
+def number_of_runs(refresh_token,id):
+    access_token = authenticate.access_from_refresh(refresh_token)
     response = httpx.get(
         url=f"{STRAVA_API_BASE_URL}/athletes/{id}/stats",
         headers={
@@ -29,7 +33,8 @@ def number_of_runs(access_token,id):
     return total_runs           
 
 @st.cache_data(show_spinner=False)
-def get_activities(access_token,page=1):
+def get_activities(refresh_token,page=1):
+    access_token = authenticate.access_from_refresh(refresh_token)
     response = httpx.get(
         url=f"{STRAVA_API_BASE_URL}/athlete/activities",
         params ={
