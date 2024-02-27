@@ -14,14 +14,13 @@ strava_header = authenticate.header()
 strava_auth = authenticate.authentication(header=strava_header)
 # st.write(strava_auth)
 
-refresh_token = authenticate.refresh_from_authentication(strava_auth)
-
 
 if strava_auth is None:
     st.markdown("Use the **Connect with Strava** button at the top of the screen to login!")
     # st.warning('Please use the Connect with Strava button to login!')
     st.stop
 
+refresh_token = authenticate.refresh_from_authentication(strava_auth)
 
 id = analysis.athlete_id(refresh_token)
 total_runs = analysis.number_of_runs(refresh_token, id) 
