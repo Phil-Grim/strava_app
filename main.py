@@ -42,7 +42,7 @@ for i in activities[:30]:
     stream = analysis.activity_stream(refresh_token, activity_id)
 
     fastest_km_time = analysis.activity_fastest_km(stream[0], stream[1])
-    fastest_km_time = timedelta(fastest_km_time)
+    fastest_km_time = timedelta(seconds=fastest_km_time)
 
     fastest_five_km_time = analysis.activity_fastest_five_km(stream[0], stream[1])
     fastest_ten_km_time = analysis.activity_fastest_ten_km(stream[0], stream[1])
