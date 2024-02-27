@@ -48,7 +48,7 @@ for i in activities[:30]:
 
     fastest_times.append([str(activity_id), name, kms, fastest_km_time, fastest_five_km_time, fastest_ten_km_time, fastest_half_time, fastest_mara_time])
 
-df = pd.DataFrame(fastest_times, columns=['activity_id', '1km', '5km', '10km', 'Half', 'Marathon'])
+df = pd.DataFrame(fastest_times, columns=['activity_id', 'name', 'kms', '1km', '5km', '10km', 'Half', 'Marathon'])
 st.dataframe(df)
 
 
