@@ -18,10 +18,15 @@ if strava_auth is None:
     st.warning('Please use the Connect with Strava button to login!')
     st.stop
 
-st.write(analysis.get_activities(strava_auth))
+
 id = analysis.athlete_id(strava_auth)
-st.write(id)
-st.write(analysis.number_of_runs(strava_auth, id))
+total_runs = analysis.number_of_runs(strava_auth, id)
+num_pages = int(total_runs)
+for i in range(num_pages):
+    page = i + 1
+    st.write(analysis.get_activities(strava_auth, page))
+
+
 
 
 
