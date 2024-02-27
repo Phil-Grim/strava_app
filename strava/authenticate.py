@@ -29,7 +29,7 @@ def powered_by_strava_logo():
         unsafe_allow_html=True,
     )
 
-
+@st.cache_data(show_spinner=False)
 def authorization_url():
     request = httpx.Request(
         method="GET",
@@ -91,7 +91,7 @@ def logout_header(strava_auth, header=None):
         unsafe_allow_html=True)
 
 
-# @st.cache(show_spinner=False, suppress_st_warning=True)
+@st.cache_data(show_spinner=False)
 def exchange_authorization_code(authorization_code):
     response = httpx.post(
         url="https://www.strava.com/oauth/token",

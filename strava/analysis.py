@@ -30,7 +30,7 @@ def number_of_runs(auth,id):
 
     return total_runs           
 
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def get_activities(auth,page=1):
     access_token = auth["access_token"]
     response = httpx.get(
