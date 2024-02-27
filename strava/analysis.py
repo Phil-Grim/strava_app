@@ -42,7 +42,12 @@ def get_activities(auth,page=1):
         },
     )
 
-    return response.json()
+    run_activities = []
+    for activity in response.json():
+        if activity['type'] == 'Run'and (activity['visibility'] == 'everyone' or activity['visibility'] == 'followers_only'):
+            run_activities.append(activity)
+
+    return run_activities
 
 
 
