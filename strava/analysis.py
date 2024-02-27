@@ -33,7 +33,7 @@ def athlete_id(auth):
 def number_of_runs(auth,id):
     access_token = auth["access_token"]
     response = httpx.get(
-        url=f"{STRAVA_API_BASE_URL}/athlete/{id}/stats",
+        url=f"{STRAVA_API_BASE_URL}/athletes/{id}/stats",
         headers={
             "Authorization": f"Bearer {access_token}",
         },
