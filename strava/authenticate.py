@@ -198,19 +198,19 @@ def access_from_refresh(refresh_token):
 # def make_clickable(url, name):
 #     return '<a href="{}" rel="noopener noreferrer" target="_blank">{}</a>'.format(url,name)
 
-# # functions to format average speed to a minutes / seconds format
-# def frac(n):
-#     i = int(n)
-#     f = round((n - int(n)), 4)
-#     return (i, f)
+# functions to format average speed to a minutes / seconds format
+def frac(n):
+    i = int(n)
+    f = round((n - int(n)), 4)
+    return (i, f)
 
-# def frmt(min):
-#     minutes, _sec = frac(min)
-#     seconds, _msecs = frac(_sec*60)
-#     if seconds > 9:
-#         return "%s:%s"%(minutes, seconds)
-#     else:
-#         return "%s:0%s"%(minutes, seconds)
+def frmt(min):
+    minutes, _sec = frac(min)
+    seconds, _msecs = frac(_sec*60)
+    if seconds > 9:
+        return "%s:%s"%(minutes, seconds)
+    else:
+        return "%s:0%s"%(minutes, seconds)
 
 
 def convert_json_to_df(activities):
@@ -231,7 +231,7 @@ def convert_json_to_df(activities):
     activities_df = pd.DataFrame(date_distance_list, columns = ['ID', 'Link to Activity', 'Name', 'Date', 'Distance', 'Moving Time', 'Elevation Gain (m)', 'End Location', 'Average Speed', 'Max Speed', 'Average HR', 'Max HR'])
     activities_df.sort_values(by='Date', inplace=True)
     activities_df['Date'] = pd.to_datetime(activities_df['Date'], format='%Y-%m-%d').dt.date
-    activities_df['Link to Activity - other approach'] = activities_df.apply(lambda x: make_clickable(x['Link to Activity'], x['Link to Activity']), axis=1)
+    # activities_df['Link to Activity - other approach'] = activities_df.apply(lambda x: make_clickable(x['Link to Activity'], x['Link to Activity']), axis=1)
     activities_df['Distance'] = pd.to_numeric(activities_df['Distance'])
     activities_df['Distance'] = activities_df['Distance']/1000
 
