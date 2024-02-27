@@ -57,7 +57,7 @@ def login_header(header=None):
     base64_image = load_image_as_base64("./static/btn_strava_connectwith_orange@2x.png")
     base.markdown(
         (
-            f"<a target=\"_self\" href=\"{strava_authorization_url}\">"
+            f"<a href=\"{strava_authorization_url}\">"
             f"  <img alt=\"strava login\" src=\"data:image/png;base64,{base64_image}\" width=\"100%\">"
             f"</a>"
         ),
