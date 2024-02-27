@@ -10,8 +10,6 @@ from bokeh.models.widgets import Div
 APP_URL = "https://stravaapp-5jhpgdn9kfmhmkdy5d5yrs.streamlit.app/"
 
 
-# STRAVA_CLIENT_ID = "106698"
-# STRAVA_CLIENT_SECRET = "a66bb23d9597d2b4027ff22a73720f226d021f68"
 STRAVA_CLIENT_ID = st.secrets["STRAVA_CLIENT_ID"]
 STRAVA_CLIENT_SECRET = st.secrets["STRAVA_CLIENT_SECRET"]
 
@@ -23,6 +21,7 @@ STRAVA_ORANGE = "#fc4c02"
 
 
 def header():
+    '''adds 3 columns to the page, along with an empty container in the 3rd column'''
     col1, col2, col3 = st.columns(3)
 
     with col3:
@@ -68,7 +67,8 @@ def login_header(header=None):
         base = button
 
     with col1:
-        powered_by_strava_logo()
+        # powered_by_strava_logo()
+        st.image('static/api_logo_pwrdBy_strava_horiz_light.png')
 
     base64_image = load_image_as_base64("./static/btn_strava_connectwith_orange@2x.png")
     base.markdown(
@@ -80,36 +80,30 @@ def login_header(header=None):
         unsafe_allow_html=True,
     )
 
-def logout_header(header=None):
+def logout_header(strava_auth, header=None):
     if header is None:
         base = st
     else:
-        _, col2, _, button = header
+        col1, col2, _, button = header
         base = button
 
+    with col1:
+        first_name = strava_auth["athlete"]["firstname"]
+        last_name = strava_auth["athlete"]["lastname"]
+        col1.markdown(f"*Welcome, {first_name} {last_name}!*") 
 
     with col2:
         powered_by_strava_logo()
 
-    if base.button("Log out"):
-        js = f"window.location.href = '{APP_URL}'"
-        html = f"<img src onerror=\"{js}\">"
-        div = Div(text=html)
-        st.bokeh_chart(div)
-
-def logged_in_title(strava_auth, header=None):
-    if header is None:
-        base = st
-    else:
-        col, _, _, _ = header
-        base = col
-
-    first_name = strava_auth["athlete"]["firstname"]
-    last_name = strava_auth["athlete"]["lastname"]
-    col.markdown(f"*Welcome, {first_name} {last_name}!*")
+    base.markdown(f'''
+        <a target="_self" href={APP_URL}><button style="background-color:{STRAVA_ORANGE};">Log Out</button></a>
+        ''',
+        unsafe_allow_html=True)
 
 
-@st.cache(show_spinner=False, suppress_st_warning=True)
+
+
+# @st.cache(show_spinner=False, suppress_st_warning=True)
 def exchange_authorization_code(authorization_code):
     response = httpx.post(
         url="https://www.strava.com/oauth/token",
@@ -124,7 +118,7 @@ def exchange_authorization_code(authorization_code):
         response.raise_for_status()
     except httpx.HTTPStatusError:
         st.error("Something went wrong while authenticating with Strava. Please reload and try again")
-        st.experimental_set_query_params()
+        st.query_params.dict()
         st.stop()
         return
 
@@ -132,138 +126,136 @@ def exchange_authorization_code(authorization_code):
 
     return strava_auth
 
-def authenticate(header=None, stop_if_unauthenticated=True):
-    query_params = st.experimental_get_query_params()
-    authorization_code = query_params.get("code", [None])[0]
+def authentication(header=None):
+    # query_parameters = st.experimental_get_query_params()
+    query_parameters = st.query_params.to_dict()
+    try: 
+        authorisation_code = query_parameters["code"]
+    except:
+        authorisation_code = None
 
-    if authorization_code is None:
-        authorization_code = query_params.get("session", [None])[0]
-
-    if authorization_code is None:
+    if authorisation_code is None:
         login_header(header=header)
-        if stop_if_unauthenticated:
-            st.stop()
-        return
+        st.stop()
     else:
-        logout_header(header=header)
-        strava_auth = exchange_authorization_code(authorization_code)
-        logged_in_title(strava_auth, header)
-        st.experimental_set_query_params(session=authorization_code)
+        json_response = exchange_authorization_code(authorisation_code)
+        logout_header(json_response, header=header)
+        # st.query_params.clear()
 
-        return strava_auth
+    return st.write(json_response)  
 
-@st.cache(show_spinner=False)
-def get_activities(auth,page=1):
-    access_token = auth["access_token"]
-    response = httpx.get(
-        url=f"{STRAVA_API_BASE_URL}/athlete/activities",
-        params ={
-            'per_page':200, 'page':page
-        },
-        headers={
-            "Authorization": f"Bearer {access_token}",
-        },
-    )
+# @st.cache(show_spinner=False)
+# def get_activities(auth,page=1):
+#     access_token = auth["access_token"]
+#     response = httpx.get(
+#         url=f"{STRAVA_API_BASE_URL}/athlete/activities",
+#         params ={
+#             'per_page':200, 'page':page
+#         },
+#         headers={
+#             "Authorization": f"Bearer {access_token}",
+#         },
+#     )
 
-    return response.json()
+#     return response.json()
 
 
 ##### Take Json, add a slider and extract json into a cleaned table 
 
 
-def activities_slider(activities):
-    # using min and max start date from get_activities output (the json of all strava activities for the user) 
-    # min_date = datetime.strptime(activities['start_date'].iloc[0][:10],'%Y-%m-%d')
-    # max_date = datetime.strptime(activities['start_date'].iloc[-1][:10],'%Y-%m-%d')
-    min_date = datetime.date(datetime.strptime(activities[0]['start_date'][:10],'%Y-%m-%d'))
-    max_date = datetime.date(datetime.strptime(activities[-1]['start_date'][:10],'%Y-%m-%d'))
+# def activities_slider(activities):
+#     # using min and max start date from get_activities output (the json of all strava activities for the user) 
+#     # min_date = datetime.strptime(activities['start_date'].iloc[0][:10],'%Y-%m-%d')
+#     # max_date = datetime.strptime(activities['start_date'].iloc[-1][:10],'%Y-%m-%d')
+#     min_date = datetime.date(datetime.strptime(activities[0]['start_date'][:10],'%Y-%m-%d'))
+#     max_date = datetime.date(datetime.strptime(activities[-1]['start_date'][:10],'%Y-%m-%d'))
     
-    start_time = st.slider(
-    "Select a date range",
-    min_date,
-    max_date,
-    value=[min_date, max_date],
-    help='Filter your strava activities by date. This will also change the headline statistics'
-    )
+#     start_time = st.slider(
+#     "Select a date range",
+#     min_date,
+#     max_date,
+#     value=[min_date, max_date],
+#     help='Filter your strava activities by date. This will also change the headline statistics'
+#     )
 
-    return start_time
+#     return start_time
 
-# Used to add the hyperlink in convert_json_to_df function
-def make_clickable(url, name):
-    return '<a href="{}" rel="noopener noreferrer" target="_blank">{}</a>'.format(url,name)
+# # Used to add the hyperlink in convert_json_to_df function
+# def make_clickable(url, name):
+#     return '<a href="{}" rel="noopener noreferrer" target="_blank">{}</a>'.format(url,name)
 
-# functions to format average speed to a minutes / seconds format
-def frac(n):
-    i = int(n)
-    f = round((n - int(n)), 4)
-    return (i, f)
+# # functions to format average speed to a minutes / seconds format
+# def frac(n):
+#     i = int(n)
+#     f = round((n - int(n)), 4)
+#     return (i, f)
 
-def frmt(min):
-    minutes, _sec = frac(min)
-    seconds, _msecs = frac(_sec*60)
-    if seconds > 9:
-        return "%s:%s"%(minutes, seconds)
-    else:
-        return "%s:0%s"%(minutes, seconds)
+# def frmt(min):
+#     minutes, _sec = frac(min)
+#     seconds, _msecs = frac(_sec*60)
+#     if seconds > 9:
+#         return "%s:%s"%(minutes, seconds)
+#     else:
+#         return "%s:0%s"%(minutes, seconds)
 
 
-def convert_json_to_df(activities):
-    date_distance_list = []
-    count = 0
-    for i in activities:
-        if i['sport_type'] == 'Run':
-            activity_url = f"https://www.strava.com/activities/{i['id']}"
-            date_distance_list.append([i['id'], activity_url, i['name'], i['start_date'][:10], i['distance'], i['moving_time'], i['total_elevation_gain'], i['end_latlng'], i['average_speed'], i['max_speed']])
-            try:
-                date_distance_list[count].append(i['average_heartrate'])
-                date_distance_list[count].append(i['max_heartrate'])
-            except:
-                date_distance_list[count].append('None')
-                date_distance_list[count].append('None')
-            count += 1
+# def convert_json_to_df(activities):
+#     date_distance_list = []
+#     count = 0
+#     for i in activities:
+#         if i['sport_type'] == 'Run':
+#             activity_url = f"https://www.strava.com/activities/{i['id']}"
+#             date_distance_list.append([i['id'], activity_url, i['name'], i['start_date'][:10], i['distance'], i['moving_time'], i['total_elevation_gain'], i['end_latlng'], i['average_speed'], i['max_speed']])
+#             try:
+#                 date_distance_list[count].append(i['average_heartrate'])
+#                 date_distance_list[count].append(i['max_heartrate'])
+#             except:
+#                 date_distance_list[count].append('None')
+#                 date_distance_list[count].append('None')
+#             count += 1
             
-    activities_df = pd.DataFrame(date_distance_list, columns = ['ID', 'Link to Activity', 'Name', 'Date', 'Distance', 'Moving Time', 'Elevation Gain (m)', 'End Location', 'Average Speed', 'Max Speed', 'Average HR', 'Max HR'])
-    activities_df.sort_values(by='Date', inplace=True)
-    activities_df['Date'] = pd.to_datetime(activities_df['Date'], format='%Y-%m-%d').dt.date
-    activities_df['Link to Activity - other approach'] = activities_df.apply(lambda x: make_clickable(x['Link to Activity'], x['Link to Activity']), axis=1)
-    activities_df['Distance'] = pd.to_numeric(activities_df['Distance'])
-    activities_df['Distance'] = activities_df['Distance']/1000
+#     activities_df = pd.DataFrame(date_distance_list, columns = ['ID', 'Link to Activity', 'Name', 'Date', 'Distance', 'Moving Time', 'Elevation Gain (m)', 'End Location', 'Average Speed', 'Max Speed', 'Average HR', 'Max HR'])
+#     activities_df.sort_values(by='Date', inplace=True)
+#     activities_df['Date'] = pd.to_datetime(activities_df['Date'], format='%Y-%m-%d').dt.date
+#     activities_df['Link to Activity - other approach'] = activities_df.apply(lambda x: make_clickable(x['Link to Activity'], x['Link to Activity']), axis=1)
+#     activities_df['Distance'] = pd.to_numeric(activities_df['Distance'])
+#     activities_df['Distance'] = activities_df['Distance']/1000
 
-    activities_df['Moving Time (mins)'] = activities_df['Moving Time']/60 # moving time is now in mins
-    activities_df['Average Speed'] = 1/(activities_df['Average Speed']*(60/1000))
-    activities_df['Max Speed'] = 1/(activities_df['Max Speed']*(60/1000))
-    activities_df['Distance (km)'] = activities_df['Distance']
+#     activities_df['Moving Time (mins)'] = activities_df['Moving Time']/60 # moving time is now in mins
+#     activities_df['Average Speed'] = 1/(activities_df['Average Speed']*(60/1000))
+#     activities_df['Max Speed'] = 1/(activities_df['Max Speed']*(60/1000))
+#     activities_df['Distance (km)'] = activities_df['Distance']
 
-    # Using above functions to format ave/max speed and moving time
-    formatted_speed = []
-    for index, row in activities_df.iterrows():
-        formatted_speed.append(frmt(row['Average Speed']))
+#     # Using above functions to format ave/max speed and moving time
+#     formatted_speed = []
+#     for index, row in activities_df.iterrows():
+#         formatted_speed.append(frmt(row['Average Speed']))
     
-    formatted_max_speed = []
-    for index, row in activities_df.iterrows():
-        formatted_max_speed.append(frmt(row['Max Speed']))
+#     formatted_max_speed = []
+#     for index, row in activities_df.iterrows():
+#         formatted_max_speed.append(frmt(row['Max Speed']))
         
-    formatted_moving_time = []
-    for index, row in activities_df.iterrows():
-        formatted_moving_time.append(frmt(row['Moving Time (mins)']))
+#     formatted_moving_time = []
+#     for index, row in activities_df.iterrows():
+#         formatted_moving_time.append(frmt(row['Moving Time (mins)']))
     
-    activities_df['Average Speed (min/km)'] = formatted_speed
-    activities_df['Max Speed (min/km)'] = formatted_max_speed
-    activities_df['Moving Time (mins)'] = formatted_moving_time
+#     activities_df['Average Speed (min/km)'] = formatted_speed
+#     activities_df['Max Speed (min/km)'] = formatted_max_speed
+#     activities_df['Moving Time (mins)'] = formatted_moving_time
 
-    activities_df = activities_df[['Name', 'Link to Activity', 'Date', 'Distance (km)', 'Moving Time (mins)', 'Elevation Gain (m)', 'Average Speed (min/km)', 'Max Speed (min/km)', 'Average HR', 'Max HR']]
+#     activities_df = activities_df[['Name', 'Link to Activity', 'Date', 'Distance (km)', 'Moving Time (mins)', 'Elevation Gain (m)', 'Average Speed (min/km)', 'Max Speed (min/km)', 'Average HR', 'Max HR']]
 
-    return activities_df
+#     return activities_df
 
-def filter_activities_from_slider(activities_df, start_time_slider):
-    filtered_df = activities_df.loc[(activities_df['Date'] >= start_time_slider[0]) & (activities_df['Date'] <= start_time_slider[1])]
-    return filtered_df
+# def filter_activities_from_slider(activities_df, start_time_slider):
+#     filtered_df = activities_df.loc[(activities_df['Date'] >= start_time_slider[0]) & (activities_df['Date'] <= start_time_slider[1])]
+#     return filtered_df
 
 
-def adding_headline_numbers(activities_df):
-    week_distance = round(activities_df['Distance (km)'].sum(), 1)
-    return week_distance
-    # make this recursive
+# def adding_headline_numbers(activities_df):
+#     week_distance = round(activities_df['Distance (km)'].sum(), 1)
+#     return week_distance
+#     # make this recursive
 
 
 
