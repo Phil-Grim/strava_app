@@ -1,24 +1,8 @@
-import base64
-import os
-import pandas as pd
-import arrow
-import httpx
 import streamlit as st
-from datetime import datetime, timedelta
-from bokeh.models.widgets import Div
+import httpx
+import base64
 
-APP_URL = "https://stravaapp-5jhpgdn9kfmhmkdy5d5yrs.streamlit.app/"
-
-
-STRAVA_CLIENT_ID = st.secrets["STRAVA_CLIENT_ID"]
-STRAVA_CLIENT_SECRET = st.secrets["STRAVA_CLIENT_SECRET"]
-
-
-STRAVA_AUTHORIZATION_URL = "https://www.strava.com/oauth/authorize"
-STRAVA_API_BASE_URL = "https://www.strava.com/api/v3"
-DEFAULT_ACTIVITY_LABEL = "NO_ACTIVITY_SELECTED"
-STRAVA_ORANGE = "#fc4c02"
-
+from strava.constants import *
 
 def header():
     '''adds 3 columns to the page, along with an empty container in the 3rd column'''
@@ -73,7 +57,7 @@ def login_header(header=None):
     base64_image = load_image_as_base64("./static/btn_strava_connectwith_orange@2x.png")
     base.markdown(
         (
-            f"<a href=\"{strava_authorization_url}\">"
+            f"<a target=\"_self\" href=\"{strava_authorization_url}\">"
             f"  <img alt=\"strava login\" src=\"data:image/png;base64,{base64_image}\" width=\"100%\">"
             f"</a>"
         ),
@@ -144,6 +128,7 @@ def authentication(header=None):
 
     return st.write(json_response)  
 
+
 # @st.cache(show_spinner=False)
 # def get_activities(auth,page=1):
 #     access_token = auth["access_token"]
@@ -161,6 +146,16 @@ def authentication(header=None):
 
 
 ##### Take Json, add a slider and extract json into a cleaned table 
+
+
+# import base64
+# import os
+# import pandas as pd
+# import arrow
+# import httpx
+# import streamlit as st
+# from datetime import datetime, timedelta
+# from bokeh.models.widgets import Div
 
 
 # def activities_slider(activities):

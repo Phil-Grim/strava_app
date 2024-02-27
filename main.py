@@ -1,4 +1,4 @@
-import strava
+from strava import authenticate
 import streamlit as st
 # import matplotlib.pyplot as plt
 # import numpy as np
@@ -9,9 +9,9 @@ st.set_page_config(
     page_icon=":circus_tent:",
 )
 
-strava_header = strava.header()
+strava_header = authenticate.header()
 
-strava_auth = strava.authentication(header=strava_header)
+strava_auth = authenticate.authentication(header=strava_header)
 
 
 # st.write(strava_auth)
