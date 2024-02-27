@@ -16,9 +16,9 @@ strava_auth = authenticate.authentication(header=strava_header)
 
 
 if strava_auth is None:
-    st.markdown("Use the **Connect with Strava** button at the top of the screen to login!")
+    # st.markdown("Use the **Connect with Strava** button at the top of the screen to login!")
     st.warning('Please use the Connect with Strava button to login!')
-    st.stop
+    st.stop()
 
 refresh_token = authenticate.refresh_from_authentication(strava_auth)
 
