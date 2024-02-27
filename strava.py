@@ -8,8 +8,14 @@ from datetime import datetime, timedelta
 from bokeh.models.widgets import Div
 
 APP_URL = "https://stravaapp-5jhpgdn9kfmhmkdy5d5yrs.streamlit.app/"
-STRAVA_CLIENT_ID = "106698"
-STRAVA_CLIENT_SECRET = "a66bb23d9597d2b4027ff22a73720f226d021f68"
+
+
+# STRAVA_CLIENT_ID = "106698"
+# STRAVA_CLIENT_SECRET = "a66bb23d9597d2b4027ff22a73720f226d021f68"
+STRAVA_CLIENT_ID = st.secrets["STRAVA_CLIENT_ID"]
+STRAVA_CLIENT_SECRET = st.secrets["STRAVA_CLIENT_SECRET"]
+
+
 STRAVA_AUTHORIZATION_URL = "https://www.strava.com/oauth/authorize"
 STRAVA_API_BASE_URL = "https://www.strava.com/api/v3"
 DEFAULT_ACTIVITY_LABEL = "NO_ACTIVITY_SELECTED"
