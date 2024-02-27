@@ -16,7 +16,7 @@ def header():
     return col1, col2, col3, strava_button
 
 
-@st.cache(show_spinner=False)
+@st.cache_data(show_spinner=False)
 def load_image_as_base64(image_path):
     with open(image_path, "rb") as f:
         contents = f.read()
@@ -115,7 +115,6 @@ def exchange_authorization_code(authorization_code):
 
     return strava_auth
 
-# @st.cache_data(show_spinner=False)
 def authentication(header=None):
     # query_parameters = st.experimental_get_query_params()
     query_parameters = st.query_params.to_dict()

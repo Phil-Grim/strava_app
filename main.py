@@ -32,14 +32,15 @@ for i in range(num_pages):
     activities.extend(page_activities)
 st.json(activities) 
 
-fastest_km_times = []
+fastest_times = []
 for i in activities[:30]:
     activity_id = i["id"]
     stream = analysis.activity_stream(refresh_token, activity_id)
     fastest_km_time = analysis.activity_fastest_km(stream[0], stream[1])
-    fastest_km_times.append([activity_id, fastest_km_time])
+    fastest_mara_time = analysis.activity_fastest_mara(stream[0], stream[1])
+    fastest_times.append([activity_id, fastest_km_time, fastest_mara_time])
 
-df = pd.DataFrame(fastest_km_times, columns=['activity_id', 'fastest_km'])
+df = pd.DataFrame(fastest_times, columns=['activity_id', 'fastest_km', 'fastest_marathon'])
 st.dataframe(df)
 
 
