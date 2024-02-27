@@ -4,6 +4,7 @@ import base64
 
 from strava.constants import *
 
+
 def header():
     '''adds 3 columns to the page, along with an empty container in the 3rd column'''
     col1, col2, col3 = st.columns(3)
@@ -13,11 +14,13 @@ def header():
 
     return col1, col2, col3, strava_button
 
+
 @st.cache(show_spinner=False)
 def load_image_as_base64(image_path):
     with open(image_path, "rb") as f:
         contents = f.read()
     return base64.b64encode(contents).decode("utf-8")
+
 
 def powered_by_strava_logo():
     base64_image = load_image_as_base64("./static/api_logo_pwrdBy_strava_horiz_light.png")
@@ -25,6 +28,7 @@ def powered_by_strava_logo():
         f'<img src="data:image/png;base64,{base64_image}" width="100%" alt="powered by strava">',
         unsafe_allow_html=True,
     )
+
 
 def authorization_url():
     request = httpx.Request(
@@ -40,6 +44,7 @@ def authorization_url():
     )
 
     return request.url
+
 
 def login_header(header=None):
     strava_authorization_url = authorization_url()
@@ -64,6 +69,7 @@ def login_header(header=None):
         unsafe_allow_html=True,
     )
 
+
 def logout_header(strava_auth, header=None):
     if header is None:
         base = st
@@ -83,8 +89,6 @@ def logout_header(strava_auth, header=None):
         <a target="_self" href={APP_URL}><button style="background-color:{STRAVA_ORANGE};">Log Out</button></a>
         ''',
         unsafe_allow_html=True)
-
-
 
 
 # @st.cache(show_spinner=False, suppress_st_warning=True)
@@ -109,6 +113,7 @@ def exchange_authorization_code(authorization_code):
     strava_auth = response.json()
 
     return strava_auth
+
 
 def authentication(header=None):
     # query_parameters = st.experimental_get_query_params()
