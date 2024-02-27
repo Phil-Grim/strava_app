@@ -18,4 +18,26 @@ def get_activities(auth,page=1):
     return response.json()
 
 
-# def total_num_runs(auth):
+def athlete_id(auth):
+    access_token = auth["access_token"]
+    response = httpx.get(
+        url=f"{STRAVA_API_BASE_URL}/athlete/activities",
+        headers={
+            "Authorization": f"Bearer {access_token}",
+        },
+    )
+    id = response.json()["id"]
+
+    return id
+
+def number_of_runs(auth,id):
+    access_token = auth["access_token"]
+    response = httpx.get(
+        url=f"{STRAVA_API_BASE_URL}/athlete/{id}/stats",
+        headers={
+            "Authorization": f"Bearer {access_token}",
+        },
+    )
+    total_runs = response.json()["all_run_totals"]["count"]
+
+    return total_runs           

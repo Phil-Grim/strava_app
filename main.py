@@ -19,6 +19,9 @@ if strava_auth is None:
     st.stop
 
 st.write(analysis.get_activities(strava_auth))
+id = analysis.athlete_id(strava_auth)
+st.write(id)
+st.write(analysis.number_of_runs(strava_auth, id))
 
 
 
