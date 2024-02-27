@@ -1,5 +1,6 @@
 import streamlit as st
 import httpx
+import requests
 import base64
 
 from strava.constants import *
@@ -132,6 +133,33 @@ def authentication(header=None):
         # st.query_params.clear()
 
     return strava_auth
+
+
+def refresh_from_authentication(auth):
+    return auth["refresh_token"]
+
+def access_from_refresh(refresh_token):
+    '''Generating Access Token from Refresh Token. 
+    
+    Refresh token doesn't change, which allows me to include parameter inputs that won't change...
+    on analysis functions which use the httpx library. This allows for the effective use of the cache_data decorator...
+    to rate limit'''
+    auth_url = "https://www.strava.com/oauth/token"
+
+
+    payload = {
+        'client_id': STRAVA_CLIENT_ID,
+        'client_secret': STRAVA_CLIENT_SECRET,
+        'refresh_token': 'd9f95e45f5dc021ca00aef1151d694e9aa6c5c75', # should stay the same, allowing you to fetch access_token (which changes every few hours)
+        'grant_type': "refresh_token",
+        'f': 'json'
+    }
+
+    res = requests.post(auth_url, data=payload, verify=False)
+
+    access_token = res.json()['access_token']
+
+    return access_token
 
 
 # @st.cache(show_spinner=False)

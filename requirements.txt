@@ -1,4 +1,5 @@
 arrow
 httpx
+requests
 bokeh==2.4.3
 matplotlib

@@ -14,39 +14,26 @@ strava_header = authenticate.header()
 strava_auth = authenticate.authentication(header=strava_header)
 st.write(strava_auth)
 
+refresh_token = authenticate.refresh_from_authentication(strava_auth)
+access_token = authenticate.access_from_refresh(refresh_token)
+
 if strava_auth is None:
     # st.markdown("Use the **Connect with Strava** button at the top of the screen to login!")
     st.warning('Please use the Connect with Strava button to login!')
     st.stop
 
 
-id = analysis.athlete_id(strava_auth)
-total_runs = analysis.number_of_runs(strava_auth, id) 
+id = analysis.athlete_id(access_token)
+total_runs = analysis.number_of_runs(access_token, id) 
 num_pages = int(total_runs/200) + 1
 activities = []
 for i in range(num_pages):
     page = i + 1
-    page_activities = analysis.get_activities(strava_auth, page)
+    page_activities = analysis.get_activities(access_token, page)
     activities.extend(page_activities)
 st.json(activities) 
 
-import httpx
-@st.cache_data(show_spinner=False)
-def testing_cache(test_param):
-    access_token = '2aa90d99e891fdd1e42a0fc9c5740caad1b98508'
-    response = httpx.get(
-        url=f"https://www.strava.com/api/v3/athlete/activities",
-        params ={
-            'per_page':200, 'page':page
-        },
-        headers={
-            "Authorization": f"Bearer {access_token}",
-        },
-    )
 
-    return response.json()
-
-testing_cache('yes')
 
 
 
