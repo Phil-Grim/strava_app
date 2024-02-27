@@ -114,7 +114,7 @@ def exchange_authorization_code(authorization_code):
 
     return strava_auth
 
-
+@st.cache_data(show_spinner=False)
 def authentication(header=None):
     # query_parameters = st.experimental_get_query_params()
     query_parameters = st.query_params.to_dict()
