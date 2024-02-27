@@ -1,4 +1,4 @@
-from strava import authenticate
+from strava import authenticate, analysis
 import streamlit as st
 # import matplotlib.pyplot as plt
 # import numpy as np
@@ -9,12 +9,17 @@ st.set_page_config(
     page_icon=":circus_tent:",
 )
 
-url = authenticate.authorization_url()
-st.write(url)
-
 strava_header = authenticate.header()
 
 strava_auth = authenticate.authentication(header=strava_header)
+
+if strava_auth is None:
+    # st.markdown("Use the **Connect with Strava** button at the top of the screen to login!")
+    st.warning('Please use the Connect with Strava button to login!')
+    st.stop
+
+st.write(analysis.get_activities)
+
 
 
 # st.write(strava_auth)

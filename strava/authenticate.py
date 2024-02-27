@@ -122,11 +122,11 @@ def authentication(header=None):
         login_header(header=header)
         st.stop()
     else:
-        json_response = exchange_authorization_code(authorisation_code)
-        logout_header(json_response, header=header)
+        strava_auth = exchange_authorization_code(authorisation_code)
+        logout_header(strava_auth, header=header)
         # st.query_params.clear()
 
-    return st.write(json_response)  
+    return strava_auth
 
 
 # @st.cache(show_spinner=False)
