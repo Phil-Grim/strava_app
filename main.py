@@ -2,7 +2,7 @@ from strava import authenticate, analysis
 import streamlit as st
 # import matplotlib.pyplot as plt
 # import numpy as np
-# import pandas as pd
+import pandas as pd
 
 st.set_page_config(
     page_title="Streamlit Activity Viewer for Strava",
@@ -12,14 +12,14 @@ st.set_page_config(
 strava_header = authenticate.header()
 
 strava_auth = authenticate.authentication(header=strava_header)
-st.write(strava_auth)
+# st.write(strava_auth)
 
 refresh_token = authenticate.refresh_from_authentication(strava_auth)
 
 
 if strava_auth is None:
-    # st.markdown("Use the **Connect with Strava** button at the top of the screen to login!")
-    st.warning('Please use the Connect with Strava button to login!')
+    st.markdown("Use the **Connect with Strava** button at the top of the screen to login!")
+    # st.warning('Please use the Connect with Strava button to login!')
     st.stop
 
 
@@ -33,6 +33,15 @@ for i in range(num_pages):
     activities.extend(page_activities)
 st.json(activities) 
 
+fastest_km_times = []
+for i in activities[:30]:
+    activity_id = i["id"]
+    stream = analysis.activity_stream(refresh_token, activity_id)
+    fastest_km_time = analysis.activity_fastest_km(stream[0], stream[1])
+    fastest_km_times.append([activity_id, fastest_km_time])
+
+df = pd.DataFrame(fastest_km_times, columns=['activity_id', 'fastest_km'])
+st.dataframe(df)
 
 
 
