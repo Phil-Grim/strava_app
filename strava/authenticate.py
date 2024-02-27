@@ -2,6 +2,7 @@ import streamlit as st
 import httpx
 import requests
 import base64
+import pandas as pd
 
 from strava.constants import *
 
