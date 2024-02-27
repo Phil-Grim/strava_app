@@ -18,7 +18,7 @@ if strava_auth is None:
     st.warning('Please use the Connect with Strava button to login!')
     st.stop
 
-st.write(analysis.get_activities())
+st.write(analysis.get_activities(strava_auth))
 
 
 

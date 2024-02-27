@@ -16,3 +16,6 @@ def get_activities(auth,page=1):
     )
 
     return response.json()
+
+
+# def total_num_runs(auth):
