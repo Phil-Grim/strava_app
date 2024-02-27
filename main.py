@@ -21,10 +21,13 @@ if strava_auth is None:
 
 id = analysis.athlete_id(strava_auth)
 total_runs = analysis.number_of_runs(strava_auth, id)
-num_pages = int(total_runs/200)
+num_pages = int(total_runs/200) + 1
+activities = []
 for i in range(num_pages):
     page = i + 1
-    st.write(analysis.get_activities(strava_auth, page))
+    page_activities = analysis.get_activities(strava_auth, page)
+    activities.extend(page_activities)
+st.json(activities)
 
 
 
