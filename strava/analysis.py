@@ -82,6 +82,9 @@ def activity_stream(refresh_token, activity_id):
 def activity_fastest_km(speeds_dict, activity_distance):
     '''Returns the fastest km split in a given activity'''
 
+    if activity_distance < 1000:
+        return np.nan
+
     times = []
     for i in range(activity_distance+1):
         try:
@@ -112,6 +115,9 @@ def activity_fastest_km(speeds_dict, activity_distance):
 @st.cache_data(show_spinner=False)
 def activity_fastest_five_km(speeds_dict, activity_distance):
     '''Returns fastest 5 km split in a given activity '''
+
+    if activity_distance < 50000:
+        return np.nan    
 
     times = []
     for i in range(activity_distance+1):
@@ -144,6 +150,9 @@ def activity_fastest_five_km(speeds_dict, activity_distance):
 def activity_fastest_ten_km(speeds_dict, activity_distance):
     '''Returns fastest 5 km split in a given activity '''
 
+    if activity_distance < 10000:
+        return np.nan
+
     times = []
     for i in range(activity_distance+1):
         try:
@@ -175,6 +184,9 @@ def activity_fastest_ten_km(speeds_dict, activity_distance):
 @st.cache_data(show_spinner=False)
 def activity_fastest_half(speeds_dict, activity_distance):
     '''Returns fastest 5 km split in a given activity '''
+
+    if activity_distance < 21098:
+        return np.nan
 
     times = []
     for i in range(activity_distance+1):

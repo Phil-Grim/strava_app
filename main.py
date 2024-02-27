@@ -30,17 +30,25 @@ for i in range(num_pages):
     page = i + 1
     page_activities = analysis.get_activities(refresh_token, page)
     activities.extend(page_activities)
-st.json(activities) 
+# st.json(activities) 
 
 fastest_times = []
 for i in activities[:30]:
     activity_id = i["id"]
-    stream = analysis.activity_stream(refresh_token, activity_id)
-    fastest_km_time = analysis.activity_fastest_km(stream[0], stream[1])
-    fastest_mara_time = analysis.activity_fastest_mara(stream[0], stream[1])
-    fastest_times.append([activity_id, fastest_km_time, fastest_mara_time])
+    name = i["name"]
+    kms = i["distance"] / 1000
 
-df = pd.DataFrame(fastest_times, columns=['activity_id', 'fastest_km', 'fastest_marathon'])
+    stream = analysis.activity_stream(refresh_token, activity_id)
+
+    fastest_km_time = analysis.activity_fastest_km(stream[0], stream[1])
+    fastest_five_km_time = analysis.activity_fastest_five_km(stream[0], stream[1])
+    fastest_ten_km_time = analysis.activity_fastest_ten_km(stream[0], stream[1])
+    fastest_half_time = analysis.activity_fastest_half(stream[0], stream[1])
+    fastest_mara_time = analysis.activity_fastest_mara(stream[0], stream[1])
+
+    fastest_times.append([str(activity_id), name, kms, fastest_km_time, fastest_five_km_time, fastest_ten_km_time, fastest_half_time, fastest_mara_time])
+
+df = pd.DataFrame(fastest_times, columns=['activity_id', '1km', '5km', '10km', 'Half', 'Marathon'])
 st.dataframe(df)
 
 
