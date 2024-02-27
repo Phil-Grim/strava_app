@@ -56,6 +56,10 @@ st.dataframe(df)
 
 
 
+old_table = authenticate.convert_json_to_df(activities)
+st.dataframe(old_table)
+
+
 
 
 

@@ -212,53 +212,53 @@ def access_from_refresh(refresh_token):
 #         return "%s:0%s"%(minutes, seconds)
 
 
-# def convert_json_to_df(activities):
-#     date_distance_list = []
-#     count = 0
-#     for i in activities:
-#         if i['sport_type'] == 'Run':
-#             activity_url = f"https://www.strava.com/activities/{i['id']}"
-#             date_distance_list.append([i['id'], activity_url, i['name'], i['start_date'][:10], i['distance'], i['moving_time'], i['total_elevation_gain'], i['end_latlng'], i['average_speed'], i['max_speed']])
-#             try:
-#                 date_distance_list[count].append(i['average_heartrate'])
-#                 date_distance_list[count].append(i['max_heartrate'])
-#             except:
-#                 date_distance_list[count].append('None')
-#                 date_distance_list[count].append('None')
-#             count += 1
+def convert_json_to_df(activities):
+    date_distance_list = []
+    count = 0
+    for i in activities:
+        if i['sport_type'] == 'Run':
+            activity_url = f"https://www.strava.com/activities/{i['id']}"
+            date_distance_list.append([i['id'], activity_url, i['name'], i['start_date'][:10], i['distance'], i['moving_time'], i['total_elevation_gain'], i['end_latlng'], i['average_speed'], i['max_speed']])
+            try:
+                date_distance_list[count].append(i['average_heartrate'])
+                date_distance_list[count].append(i['max_heartrate'])
+            except:
+                date_distance_list[count].append('None')
+                date_distance_list[count].append('None')
+            count += 1
             
-#     activities_df = pd.DataFrame(date_distance_list, columns = ['ID', 'Link to Activity', 'Name', 'Date', 'Distance', 'Moving Time', 'Elevation Gain (m)', 'End Location', 'Average Speed', 'Max Speed', 'Average HR', 'Max HR'])
-#     activities_df.sort_values(by='Date', inplace=True)
-#     activities_df['Date'] = pd.to_datetime(activities_df['Date'], format='%Y-%m-%d').dt.date
-#     activities_df['Link to Activity - other approach'] = activities_df.apply(lambda x: make_clickable(x['Link to Activity'], x['Link to Activity']), axis=1)
-#     activities_df['Distance'] = pd.to_numeric(activities_df['Distance'])
-#     activities_df['Distance'] = activities_df['Distance']/1000
+    activities_df = pd.DataFrame(date_distance_list, columns = ['ID', 'Link to Activity', 'Name', 'Date', 'Distance', 'Moving Time', 'Elevation Gain (m)', 'End Location', 'Average Speed', 'Max Speed', 'Average HR', 'Max HR'])
+    activities_df.sort_values(by='Date', inplace=True)
+    activities_df['Date'] = pd.to_datetime(activities_df['Date'], format='%Y-%m-%d').dt.date
+    activities_df['Link to Activity - other approach'] = activities_df.apply(lambda x: make_clickable(x['Link to Activity'], x['Link to Activity']), axis=1)
+    activities_df['Distance'] = pd.to_numeric(activities_df['Distance'])
+    activities_df['Distance'] = activities_df['Distance']/1000
 
-#     activities_df['Moving Time (mins)'] = activities_df['Moving Time']/60 # moving time is now in mins
-#     activities_df['Average Speed'] = 1/(activities_df['Average Speed']*(60/1000))
-#     activities_df['Max Speed'] = 1/(activities_df['Max Speed']*(60/1000))
-#     activities_df['Distance (km)'] = activities_df['Distance']
+    activities_df['Moving Time (mins)'] = activities_df['Moving Time']/60 # moving time is now in mins
+    activities_df['Average Speed'] = 1/(activities_df['Average Speed']*(60/1000))
+    activities_df['Max Speed'] = 1/(activities_df['Max Speed']*(60/1000))
+    activities_df['Distance (km)'] = activities_df['Distance']
 
-#     # Using above functions to format ave/max speed and moving time
-#     formatted_speed = []
-#     for index, row in activities_df.iterrows():
-#         formatted_speed.append(frmt(row['Average Speed']))
+    # Using above functions to format ave/max speed and moving time
+    formatted_speed = []
+    for index, row in activities_df.iterrows():
+        formatted_speed.append(frmt(row['Average Speed']))
     
-#     formatted_max_speed = []
-#     for index, row in activities_df.iterrows():
-#         formatted_max_speed.append(frmt(row['Max Speed']))
+    formatted_max_speed = []
+    for index, row in activities_df.iterrows():
+        formatted_max_speed.append(frmt(row['Max Speed']))
         
-#     formatted_moving_time = []
-#     for index, row in activities_df.iterrows():
-#         formatted_moving_time.append(frmt(row['Moving Time (mins)']))
+    formatted_moving_time = []
+    for index, row in activities_df.iterrows():
+        formatted_moving_time.append(frmt(row['Moving Time (mins)']))
     
-#     activities_df['Average Speed (min/km)'] = formatted_speed
-#     activities_df['Max Speed (min/km)'] = formatted_max_speed
-#     activities_df['Moving Time (mins)'] = formatted_moving_time
+    activities_df['Average Speed (min/km)'] = formatted_speed
+    activities_df['Max Speed (min/km)'] = formatted_max_speed
+    activities_df['Moving Time (mins)'] = formatted_moving_time
 
-#     activities_df = activities_df[['Name', 'Link to Activity', 'Date', 'Distance (km)', 'Moving Time (mins)', 'Elevation Gain (m)', 'Average Speed (min/km)', 'Max Speed (min/km)', 'Average HR', 'Max HR']]
+    activities_df = activities_df[['Name', 'Link to Activity', 'Date', 'Distance (km)', 'Moving Time (mins)', 'Elevation Gain (m)', 'Average Speed (min/km)', 'Max Speed (min/km)', 'Average HR', 'Max HR']]
 
-#     return activities_df
+    return activities_df
 
 # def filter_activities_from_slider(activities_df, start_time_slider):
 #     filtered_df = activities_df.loc[(activities_df['Date'] >= start_time_slider[0]) & (activities_df['Date'] <= start_time_slider[1])]
