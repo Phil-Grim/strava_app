@@ -29,6 +29,24 @@ for i in range(num_pages):
     activities.extend(page_activities)
 st.json(activities) 
 
+import httpx
+@st.cache_data(show_spinner=False)
+def testing_cache(test_param):
+    access_token = '2aa90d99e891fdd1e42a0fc9c5740caad1b98508'
+    response = httpx.get(
+        url=f"https://www.strava.com/api/v3/athlete/activities",
+        params ={
+            'per_page':200, 'page':page
+        },
+        headers={
+            "Authorization": f"Bearer {access_token}",
+        },
+    )
+
+    return response.json()
+
+testing_cache('yes')
+
 
 
 
