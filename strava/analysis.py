@@ -116,7 +116,7 @@ def activity_fastest_km(speeds_dict, activity_distance):
 def activity_fastest_five_km(speeds_dict, activity_distance):
     '''Returns fastest 5 km split in a given activity '''
 
-    if activity_distance < 50000:
+    if activity_distance < 5000:
         return np.nan    
 
     times = []

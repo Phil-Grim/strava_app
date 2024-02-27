@@ -3,6 +3,7 @@ import streamlit as st
 # import matplotlib.pyplot as plt
 # import numpy as np
 import pandas as pd
+from datetime import timedelta
 
 st.set_page_config(
     page_title="Streamlit Activity Viewer for Strava",
@@ -41,6 +42,8 @@ for i in activities[:30]:
     stream = analysis.activity_stream(refresh_token, activity_id)
 
     fastest_km_time = analysis.activity_fastest_km(stream[0], stream[1])
+    fastest_km_time = timedelta(fastest_km_time)
+
     fastest_five_km_time = analysis.activity_fastest_five_km(stream[0], stream[1])
     fastest_ten_km_time = analysis.activity_fastest_ten_km(stream[0], stream[1])
     fastest_half_time = analysis.activity_fastest_half(stream[0], stream[1])
