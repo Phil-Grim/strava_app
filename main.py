@@ -1,17 +1,13 @@
 from strava import authenticate, analysis
 import streamlit as st
-# import matplotlib.pyplot as plt
-# import numpy as np
-import pandas as pd
-from datetime import timedelta
+
 
 st.set_page_config(
-    page_title="Streamlit Activity Viewer for Strava",
-    page_icon=":circus_tent:",
+    page_title="Strava Personal Best Viewer",
+    page_icon=":runner:",
 )
 
 strava_header = authenticate.header()
-
 strava_auth = authenticate.authentication(header=strava_header)
 # st.write(strava_auth)
 
@@ -23,23 +19,18 @@ if strava_auth is None:
 
 st.markdown(
     """
-    # :runner: Strava Personal Bests
+    # :runner: Strava Personal Best Viewer
 
     This is a Streamlit application which shows users their 1km, 5km, 10km, half and marathon personal bests over a given time period.
+    
     The app implements the [Strava API](https://developers.strava.com/) OAuth2 authentication flow to allow viewers to see their indivudual personal bests."""
 )
 
 
-
 refresh_token = authenticate.refresh_from_authentication(strava_auth)
-
 activities = analysis.full_activity_list(refresh_token)
-    
 slider = analysis.activities_slider(activities)
-
-
 df = analysis.create_dataframe(activities, refresh_token)
-
 filtered_table = analysis.filter_activities_from_slider(df, slider)
 
 
