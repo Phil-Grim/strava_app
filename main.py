@@ -9,7 +9,7 @@ st.set_page_config(
 
 strava_header = authenticate.header()
 strava_auth = authenticate.authentication(header=strava_header)
-# st.write(strava_auth)
+st.write(strava_auth)
 
 
 if strava_auth is None:
@@ -21,7 +21,7 @@ st.markdown(
     """
     # :runner: Strava Personal Best Viewer
 
-    This is a Streamlit application which shows users their 1km, 5km, 10km, half and marathon personal bests over a given time period.
+    This is a proof of concept Streamlit application which shows users their 1km, 5km, 10km, half and marathon personal bests over a given time period.
     
     The app implements the [Strava API](https://developers.strava.com/) OAuth2 authentication flow to allow viewers to see their indivudual personal bests."""
 )
@@ -47,46 +47,20 @@ st.dataframe(
 
 
 # old_table = authenticate.convert_json_to_df(activities)
+# old_table_filtered = analysis.filter_activities_from_slider(old_table, slider)
 # st.dataframe(old_table)
 
 
 
 
 
-# st.write(strava_auth)
 
 
 
-# if strava_auth is None:
-#     st.markdown("Use the **Connect with Strava** button at the top of the screen to login!")
-#     st.warning('Please login!')
-#     # st.stop
-#     # st.exception("Please login!")
-# else:
-#     # st.success("Thanks for logging in")
-#     st.header("Strava Activities")
 
-#     activities = []
-#     json_activities = strava.get_activities(strava_auth, page=1)
-#     json_activities_2 = strava.get_activities(strava_auth, page=2)
-#     activities.extend(json_activities)
-#     activities.extend(json_activities_2)
-#     st.json(activities)
-
-#     slider = strava.activities_slider(activities)
-#     activity_table = strava.convert_json_to_df(activities) # ADDED LINE
-#     filtered_table = strava.filter_activities_from_slider(activity_table, slider)
-
-#     st.dataframe(
-#         filtered_table, 
-#         column_config={"Link to Activity": st.column_config.LinkColumn()
-#                       },
-#         hide_index=True
-#     )
-
-#     st.header("Headline Numbers")
-#     distance = strava.adding_headline_numbers(filtered_table)
-#     st.write('You ran', distance, 'kms during the specified date range')
+# st.header("Headline Numbers")
+# distance = strava.adding_headline_numbers(filtered_table)
+# st.write('You ran', distance, 'kms during the specified date range')
 
     ##############################
     ########### Adding Histogram - functionalise this in strava.py later
