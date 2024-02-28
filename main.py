@@ -13,7 +13,6 @@ strava_auth = authenticate.authentication(header=strava_header)
 
 
 if strava_auth is None:
-    # st.markdown("Use the **Connect with Strava** button at the top of the screen to login!")
     st.warning('Please use the Connect with Strava button to login!')
     st.stop()
 
@@ -29,7 +28,7 @@ st.markdown(
 
 refresh_token = authenticate.refresh_from_authentication(strava_auth)
 
-with st.spinner(f"Generating fastest splits for Strava activities"):
+with st.spinner(f"Generating date slider to filter Strava activities"):
     activities = analysis.full_activity_list(refresh_token)
 
     if len(activities) == 0:
@@ -43,15 +42,15 @@ with st.spinner(f"Generating fastest splits for Strava activities"):
     filtered_table = analysis.filter_activities_from_slider(df, slider)
 
 
-# Can move this to a function too
-st.dataframe(
-    filtered_table, 
-    column_config={"Activity ID": st.column_config.LinkColumn(
-        display_text='\/activities\/(\d+)'
+    # Can move this to a function too
+    st.dataframe(
+        filtered_table, 
+        column_config={"Activity ID": st.column_config.LinkColumn(
+            display_text='\/activities\/(\d+)'
+        )
+                        },
+        hide_index=True
     )
-                    },
-    hide_index=True
-)
 
 
 
@@ -59,6 +58,7 @@ st.dataframe(
 # st.header("Headline Numbers")
 # distance = strava.adding_headline_numbers(filtered_table)
 # st.write('You ran', distance, 'kms during the specified date range')
+
 
 #############################
 ########## Adding Histogram - functionalise this in strava.py later

@@ -309,7 +309,7 @@ def create_dataframe(activities, refresh_token):
         activity_url = f'https://www.strava.com/activities/{activity_id}'
         name = i["name"]
         kms = round(i["distance"] / 1000, 2)
-        dates = i["start_date"][:10]
+        dates = i["start_date"][:80]
 
         stream = activity_stream(refresh_token, activity_id)
 
