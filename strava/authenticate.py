@@ -178,26 +178,7 @@ def access_from_refresh(refresh_token):
 # from bokeh.models.widgets import Div
 
 
-# def activities_slider(activities):
-#     # using min and max start date from get_activities output (the json of all strava activities for the user) 
-#     # min_date = datetime.strptime(activities['start_date'].iloc[0][:10],'%Y-%m-%d')
-#     # max_date = datetime.strptime(activities['start_date'].iloc[-1][:10],'%Y-%m-%d')
-#     min_date = datetime.date(datetime.strptime(activities[0]['start_date'][:10],'%Y-%m-%d'))
-#     max_date = datetime.date(datetime.strptime(activities[-1]['start_date'][:10],'%Y-%m-%d'))
-    
-#     start_time = st.slider(
-#     "Select a date range",
-#     min_date,
-#     max_date,
-#     value=[min_date, max_date],
-#     help='Filter your strava activities by date. This will also change the headline statistics'
-#     )
 
-#     return start_time
-
-# Used to add the hyperlink in convert_json_to_df function
-def make_clickable(url, name):
-    return '<a href="{}" rel="noopener noreferrer" target="_blank">{}</a>'.format(url,name)
 
 # functions to format average speed to a minutes / seconds format
 def frac(n):
@@ -232,7 +213,6 @@ def convert_json_to_df(activities):
     activities_df = pd.DataFrame(date_distance_list, columns = ['ID', 'Link to Activity', 'Name', 'Date', 'Distance', 'Moving Time', 'Elevation Gain (m)', 'End Location', 'Average Speed', 'Max Speed', 'Average HR', 'Max HR'])
     activities_df.sort_values(by='Date', inplace=True)
     activities_df['Date'] = pd.to_datetime(activities_df['Date'], format='%Y-%m-%d').dt.date
-    activities_df['Link to Activity - other approach'] = activities_df.apply(lambda x: make_clickable(x['Link to Activity'], x['Link to Activity']), axis=1)
     activities_df['Distance'] = pd.to_numeric(activities_df['Distance'])
     activities_df['Distance'] = activities_df['Distance']/1000
 
@@ -261,10 +241,6 @@ def convert_json_to_df(activities):
     activities_df = activities_df[['Name', 'Link to Activity', 'Date', 'Distance (km)', 'Moving Time (mins)', 'Elevation Gain (m)', 'Average Speed (min/km)', 'Max Speed (min/km)', 'Average HR', 'Max HR']]
 
     return activities_df
-
-# def filter_activities_from_slider(activities_df, start_time_slider):
-#     filtered_df = activities_df.loc[(activities_df['Date'] >= start_time_slider[0]) & (activities_df['Date'] <= start_time_slider[1])]
-#     return filtered_df
 
 
 # def adding_headline_numbers(activities_df):

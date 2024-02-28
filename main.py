@@ -54,7 +54,7 @@ for i in activities[:30]:
     activity_id = i["id"]
     name = i["name"]
     kms = round(i["distance"] / 1000, 2)
-    dates = i["start_date"]
+    dates = i["start_date"][:10]
 
     stream = analysis.activity_stream(refresh_token, activity_id)
 
