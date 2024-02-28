@@ -300,17 +300,13 @@ def activities_slider(activities):
     return start_time
 
 
-def filter_activities_from_slider(activities_df, start_time_slider):
-    '''filter the resulting dataframe based on a date slider'''
-    filtered_df = activities_df.loc[(activities_df['date'] >= start_time_slider[0]) & (activities_df['date'] <= start_time_slider[1])]
-    return filtered_df
-
 @st.cache_data(show_spinner=False)
 def create_dataframe(activities, refresh_token):
-    with st.spinner(f"Generating fastes splits for Strava actvities"):
+    with st.spinner(f"Generating fastest splits for Strava activities"):
         rows = []
         for i in activities[:30]:
             activity_id = i["id"]
+            activity_url = f'https://www.strava.com/activities/{activity_id}'
             name = i["name"]
             kms = round(i["distance"] / 1000, 2)
             dates = i["start_date"][:10]
@@ -323,9 +319,15 @@ def create_dataframe(activities, refresh_token):
             fastest_half_time = activity_fastest_half(stream[0], stream[1])
             fastest_mara_time = activity_fastest_mara(stream[0], stream[1])
 
-            rows.append([str(activity_id), name, dates, kms, fastest_km_time, fastest_five_km_time, fastest_ten_km_time, fastest_half_time, fastest_mara_time])
+            rows.append([activity_url, name, dates, kms, fastest_km_time, fastest_five_km_time, fastest_ten_km_time, fastest_half_time, fastest_mara_time])
 
-        df = pd.DataFrame(rows, columns=['activity_id', 'name', 'date', 'kms', '1km', '5km', '10km', 'Half', 'Marathon'])
-        df[['1km', '5km', '10km', 'Half', 'Marathon']] = df[['1km', '5km', '10km', 'Half', 'Marathon']].applymap(convertSecs)
-        df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d').dt.date
+        df = pd.DataFrame(rows, columns=['Activity ID', 'Name', 'Date', 'Kms', '1km', '5km', '10km', 'Half Marathon', 'Marathon'])
+        df[['1km', '5km', '10km', 'Half Marathon', 'Marathon']] = df[['1km', '5km', '10km', 'Half Marathon', 'Marathon']].applymap(convertSecs)
+        df['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d').dt.date
         return df 
+    
+
+def filter_activities_from_slider(activities_df, start_time_slider):
+    '''filter the resulting dataframe based on a date slider'''
+    filtered_df = activities_df.loc[(activities_df['Date'] >= start_time_slider[0]) & (activities_df['Date'] <= start_time_slider[1])]
+    return filtered_df
