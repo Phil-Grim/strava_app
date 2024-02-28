@@ -138,6 +138,7 @@ def authentication(header=None):
 def refresh_from_authentication(auth):
     return auth["refresh_token"]
 
+
 def access_from_refresh(refresh_token):
     '''Generating Access Token from Refresh Token. 
     
@@ -194,9 +195,9 @@ def access_from_refresh(refresh_token):
 
 #     return start_time
 
-# # Used to add the hyperlink in convert_json_to_df function
-# def make_clickable(url, name):
-#     return '<a href="{}" rel="noopener noreferrer" target="_blank">{}</a>'.format(url,name)
+# Used to add the hyperlink in convert_json_to_df function
+def make_clickable(url, name):
+    return '<a href="{}" rel="noopener noreferrer" target="_blank">{}</a>'.format(url,name)
 
 # functions to format average speed to a minutes / seconds format
 def frac(n):
@@ -231,7 +232,7 @@ def convert_json_to_df(activities):
     activities_df = pd.DataFrame(date_distance_list, columns = ['ID', 'Link to Activity', 'Name', 'Date', 'Distance', 'Moving Time', 'Elevation Gain (m)', 'End Location', 'Average Speed', 'Max Speed', 'Average HR', 'Max HR'])
     activities_df.sort_values(by='Date', inplace=True)
     activities_df['Date'] = pd.to_datetime(activities_df['Date'], format='%Y-%m-%d').dt.date
-    # activities_df['Link to Activity - other approach'] = activities_df.apply(lambda x: make_clickable(x['Link to Activity'], x['Link to Activity']), axis=1)
+    activities_df['Link to Activity - other approach'] = activities_df.apply(lambda x: make_clickable(x['Link to Activity'], x['Link to Activity']), axis=1)
     activities_df['Distance'] = pd.to_numeric(activities_df['Distance'])
     activities_df['Distance'] = activities_df['Distance']/1000
 

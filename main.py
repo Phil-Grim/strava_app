@@ -42,7 +42,7 @@ for i in activities[:30]:
     stream = analysis.activity_stream(refresh_token, activity_id)
 
     fastest_km_time = analysis.activity_fastest_km(stream[0], stream[1])
-    fastest_km_time = analysis.convertSecs(fastest_km_time)
+    # fastest_km_time = analysis.convertSecs(fastest_km_time)
 
     fastest_five_km_time = analysis.activity_fastest_five_km(stream[0], stream[1])
     fastest_ten_km_time = analysis.activity_fastest_ten_km(stream[0], stream[1])
@@ -52,6 +52,7 @@ for i in activities[:30]:
     fastest_times.append([str(activity_id), name, kms, fastest_km_time, fastest_five_km_time, fastest_ten_km_time, fastest_half_time, fastest_mara_time])
 
 df = pd.DataFrame(fastest_times, columns=['activity_id', 'name', 'kms', '1km', '5km', '10km', 'Half', 'Marathon'])
+df[['1km', '5km', '10km', 'Half', 'Marathon']] = df[['1km', '5km', '10km', 'Half', 'Marathon']].applymap(analysis.convertSecs)
 st.dataframe(df)
 
 
