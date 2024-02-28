@@ -252,10 +252,12 @@ def activity_fastest_mara(speeds_dict, activity_distance):
 
 def convertSecs(seconds):
     '''Converting fastest times into a clearer format (from seconds to %H:%M:%S)'''
-
-    remaining_seconds = int(seconds) % 60
-    minutes = int((seconds/60) % 60)
-    hours = int(seconds/(60*60))
-    return f'{hours:02d}:{minutes:02d}:{remaining_seconds:02d}'
+    if np.isnan(seconds):
+        return np.nan
+    else:
+        remaining_seconds = int(seconds) % 60
+        minutes = int((seconds/60) % 60)
+        hours = int(seconds/(60*60))
+        return f'{hours:02d}:{minutes:02d}:{remaining_seconds:02d}'
 
 
