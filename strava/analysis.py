@@ -1,6 +1,7 @@
 import httpx
 import streamlit as st
 import numpy as np
+from datetime import datetime
 
 from strava import authenticate
 from strava.constants import *
@@ -261,3 +262,21 @@ def convertSecs(seconds):
         return f'{hours:02d}:{minutes:02d}:{remaining_seconds:02d}'
 
 
+def activities_slider(activities):
+    # using min and max start date from get_activities output (the json of all strava activities for the user) 
+
+    min_date = datetime.date(datetime.strptime(activities[0]['start_date'][:10],'%Y-%m-%d'))
+    max_date = datetime.date(datetime.strptime(activities[-1]['start_date'][:10],'%Y-%m-%d'))
+    
+    start_time = st.slider(
+    "Select a date range",
+    min_date,
+    max_date,
+    value=[min_date, max_date],
+    help='Filter your strava activities by date. This will also change the headline statistics'
+    )
+
+    return start_time
+
+#     min_date = datetime.date(datetime.strptime(activities[0]['start_date'][:10],'%Y-%m-%d'))
+#     max_date = datetime.date(datetime.strptime(activities[-1]['start_date'][:10],'%Y-%m-%d'))

@@ -21,6 +21,15 @@ if strava_auth is None:
     st.warning('Please use the Connect with Strava button to login!')
     st.stop()
 
+st.markdown(
+    """
+    # :runner: Strava Personal Bests
+    This is a Streamlit application which shows users their 1km, 5km, 10km, half and marathon personal bests over a given time period.
+    The app implements the Strava API OAuth2 authentication flow to allow viewers to see their personal bests."""
+)
+
+
+
 refresh_token = authenticate.refresh_from_authentication(strava_auth)
 
 id = analysis.athlete_id(refresh_token)
@@ -32,6 +41,8 @@ for i in range(num_pages):
     page_activities = analysis.get_activities(refresh_token, page)
     activities.extend(page_activities)
 # st.json(activities) 
+    
+slider = analysis.activities_slider(activities)
 
 fastest_times = []
 for i in activities[:30]:
@@ -42,8 +53,6 @@ for i in activities[:30]:
     stream = analysis.activity_stream(refresh_token, activity_id)
 
     fastest_km_time = analysis.activity_fastest_km(stream[0], stream[1])
-    # fastest_km_time = analysis.convertSecs(fastest_km_time)
-
     fastest_five_km_time = analysis.activity_fastest_five_km(stream[0], stream[1])
     fastest_ten_km_time = analysis.activity_fastest_ten_km(stream[0], stream[1])
     fastest_half_time = analysis.activity_fastest_half(stream[0], stream[1])
