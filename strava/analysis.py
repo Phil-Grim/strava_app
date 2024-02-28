@@ -8,7 +8,7 @@ from strava.constants import *
 
 
 
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def athlete_id(refresh_token):
     access_token = authenticate.access_from_refresh(refresh_token)
     response = httpx.get(
@@ -21,7 +21,7 @@ def athlete_id(refresh_token):
 
     return id
 
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def number_of_runs(refresh_token,id):
     access_token = authenticate.access_from_refresh(refresh_token)
     response = httpx.get(
