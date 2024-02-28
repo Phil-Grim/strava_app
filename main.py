@@ -37,19 +37,21 @@ with st.spinner(f"Generating fastest splits for Strava activities"):
         st.stop()
 
     slider = analysis.activities_slider(activities)
+
+with st.spinner(f"Generating fastest splits for Strava activities"):
     df = analysis.create_dataframe(activities, refresh_token)
     filtered_table = analysis.filter_activities_from_slider(df, slider)
 
 
-    # Can move this to a function too
-    st.dataframe(
-        filtered_table, 
-        column_config={"Activity ID": st.column_config.LinkColumn(
-            display_text='\/activities\/(\d+)'
-        )
-                        },
-        hide_index=True
+# Can move this to a function too
+st.dataframe(
+    filtered_table, 
+    column_config={"Activity ID": st.column_config.LinkColumn(
+        display_text='\/activities\/(\d+)'
     )
+                    },
+    hide_index=True
+)
 
 
 
