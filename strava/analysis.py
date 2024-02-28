@@ -304,12 +304,13 @@ def activities_slider(activities):
 def create_dataframe(activities, refresh_token):
 
     rows = []
-    for i in activities[:210]:
+    for i in activities[:145]:
         activity_id = i["id"]
         activity_url = f'https://www.strava.com/activities/{activity_id}'
         name = i["name"]
         kms = round(i["distance"] / 1000, 2)
         dates = i["start_date"][:10]
+        moving_time = i['moving_time']
 
         stream = activity_stream(refresh_token, activity_id)
 
@@ -319,10 +320,10 @@ def create_dataframe(activities, refresh_token):
         fastest_half_time = activity_fastest_half(stream[0], stream[1])
         fastest_mara_time = activity_fastest_mara(stream[0], stream[1])
 
-        rows.append([activity_url, name, dates, kms, fastest_km_time, fastest_five_km_time, fastest_ten_km_time, fastest_half_time, fastest_mara_time])
+        rows.append([activity_url, name, dates, kms, moving_time, fastest_km_time, fastest_five_km_time, fastest_ten_km_time, fastest_half_time, fastest_mara_time])
 
-    df = pd.DataFrame(rows, columns=['Activity ID', 'Name', 'Date', 'Kms', '1km', '5km', '10km', 'Half Marathon', 'Marathon'])
-    df[['1km', '5km', '10km', 'Half Marathon', 'Marathon']] = df[['1km', '5km', '10km', 'Half Marathon', 'Marathon']].applymap(convertSecs)
+    df = pd.DataFrame(rows, columns=['Activity ID', 'Name', 'Date', 'Kms', 'Moving Time', '1km', '5km', '10km', 'Half Marathon', 'Marathon'])
+    df[['Moving Time', '1km', '5km', '10km', 'Half Marathon', 'Marathon']] = df[['Moving Time', '1km', '5km', '10km', 'Half Marathon', 'Marathon']].applymap(convertSecs)
     df['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d').dt.date
     return df 
     
