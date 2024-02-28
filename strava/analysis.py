@@ -304,7 +304,7 @@ def activities_slider(activities):
 def create_dataframe(activities, refresh_token):
 
     rows = []
-    for i in activities[:160]:
+    for i in activities[:210]:
         activity_id = i["id"]
         activity_url = f'https://www.strava.com/activities/{activity_id}'
         name = i["name"]
