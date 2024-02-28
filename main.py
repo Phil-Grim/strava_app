@@ -58,7 +58,7 @@ slider = analysis.activities_slider(activities)
 # df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d').dt.date
 
 
-df = analysis.create_dataframe(activities)
+df = analysis.create_dataframe(activities, refresh_token)
 
 
 filtered_table = analysis.filter_activities_from_slider(df, slider)
