@@ -29,6 +29,11 @@ st.markdown(
 
 refresh_token = authenticate.refresh_from_authentication(strava_auth)
 activities = analysis.full_activity_list(refresh_token)
+
+if len(activities) == 0:
+    st.warning("Your Strava Account doesn't have any public running activities")
+    st.stop()
+
 slider = analysis.activities_slider(activities)
 df = analysis.create_dataframe(activities, refresh_token)
 filtered_table = analysis.filter_activities_from_slider(df, slider)

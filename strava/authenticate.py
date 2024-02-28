@@ -151,7 +151,7 @@ def access_from_refresh(refresh_token):
     payload = {
         'client_id': STRAVA_CLIENT_ID,
         'client_secret': STRAVA_CLIENT_SECRET,
-        'refresh_token': 'd9f95e45f5dc021ca00aef1151d694e9aa6c5c75', # should stay the same, allowing you to fetch access_token (which changes every few hours)
+        'refresh_token': refresh_token, # should stay the same, allowing you to fetch access_token (which changes every few hours)
         'grant_type': "refresh_token",
         'f': 'json'
     }
