@@ -70,7 +70,7 @@ st.dataframe(
 #############################
 ########## Adding Histogram - functionalise this in strava.py later
 #############################
-
+from matplotlib import pyplot as plt
 from matplotlib.ticker import FormatStrFormatter # put here so I remember to move it into strava.py
 import numpy as np
 st.header("Run Distribution by Distance (kms)")
