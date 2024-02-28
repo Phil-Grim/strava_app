@@ -3,7 +3,6 @@ import httpx
 import requests
 import base64
 import pandas as pd
-
 from strava.constants import *
 
 
@@ -115,6 +114,7 @@ def exchange_authorization_code(authorization_code):
     strava_auth = response.json()
 
     return strava_auth
+
 
 def authentication(header=None):
     # query_parameters = st.experimental_get_query_params()

@@ -2,6 +2,7 @@ import httpx
 import streamlit as st
 import numpy as np
 from datetime import datetime
+import pandas as pd
 
 from strava import authenticate
 from strava.constants import *
@@ -21,6 +22,7 @@ def athlete_id(refresh_token):
 
     return id
 
+
 @st.cache_data(show_spinner=False)
 def number_of_runs(refresh_token,id):
     access_token = authenticate.access_from_refresh(refresh_token)
@@ -33,6 +35,7 @@ def number_of_runs(refresh_token,id):
     total_runs = response.json()["all_run_totals"]["count"]
 
     return total_runs           
+
 
 @st.cache_data(show_spinner=False)
 def get_activities(refresh_token,total_runs, page=1):
@@ -59,7 +62,7 @@ def get_activities(refresh_token,total_runs, page=1):
 
 
 def full_activity_list(refresh_token):
-    # extracts the full list of activities
+    # extracts the full list of activities for every page of activities
     id = athlete_id(refresh_token)
 
     total_runs = number_of_runs(refresh_token, id) 
@@ -129,6 +132,7 @@ def activity_fastest_km(speeds_dict, activity_distance):
         return np.nan
     else:
         return min(times)
+    
     
 @st.cache_data(show_spinner=False)
 def activity_fastest_five_km(speeds_dict, activity_distance):
@@ -295,7 +299,33 @@ def activities_slider(activities):
 
     return start_time
 
+
 def filter_activities_from_slider(activities_df, start_time_slider):
     '''filter the resulting dataframe based on a date slider'''
     filtered_df = activities_df.loc[(activities_df['date'] >= start_time_slider[0]) & (activities_df['date'] <= start_time_slider[1])]
     return filtered_df
+
+@st.cache_data(show_spinner=False)
+def create_dataframe(activities, refresh_token):
+    with st.spinner(f"Generating fastes splits for Strava actvities"):
+        rows = []
+        for i in activities[:30]:
+            activity_id = i["id"]
+            name = i["name"]
+            kms = round(i["distance"] / 1000, 2)
+            dates = i["start_date"][:10]
+
+            stream = activity_stream(refresh_token, activity_id)
+
+            fastest_km_time = activity_fastest_km(stream[0], stream[1])
+            fastest_five_km_time = activity_fastest_five_km(stream[0], stream[1])
+            fastest_ten_km_time = activity_fastest_ten_km(stream[0], stream[1])
+            fastest_half_time = activity_fastest_half(stream[0], stream[1])
+            fastest_mara_time = activity_fastest_mara(stream[0], stream[1])
+
+            rows.append([str(activity_id), name, dates, kms, fastest_km_time, fastest_five_km_time, fastest_ten_km_time, fastest_half_time, fastest_mara_time])
+
+        df = pd.DataFrame(rows, columns=['activity_id', 'name', 'date', 'kms', '1km', '5km', '10km', 'Half', 'Marathon'])
+        df[['1km', '5km', '10km', 'Half', 'Marathon']] = df[['1km', '5km', '10km', 'Half', 'Marathon']].applymap(convertSecs)
+        df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d').dt.date
+        return df 

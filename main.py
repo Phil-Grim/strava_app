@@ -32,43 +32,34 @@ st.markdown(
 
 refresh_token = authenticate.refresh_from_authentication(strava_auth)
 
-# id = analysis.athlete_id(refresh_token)
-# total_runs = analysis.number_of_runs(refresh_token, id) 
-# num_pages = int(total_runs/200) + 1
-# activities = []
-# for i in range(num_pages):
-#     page = i + 1
-#     page_activities = analysis.get_activities(refresh_token, page)
-#     activities.extend(page_activities)
-# # st.json(activities) 
-
-# moved above function to analysis:
 activities = analysis.full_activity_list(refresh_token)
-    
-
     
 slider = analysis.activities_slider(activities)
 
-fastest_times = []
-for i in activities[:30]:
-    activity_id = i["id"]
-    name = i["name"]
-    kms = round(i["distance"] / 1000, 2)
-    dates = i["start_date"][:10]
+# fastest_times = []
+# for i in activities[:30]:
+#     activity_id = i["id"]
+#     name = i["name"]
+#     kms = round(i["distance"] / 1000, 2)
+#     dates = i["start_date"][:10]
 
-    stream = analysis.activity_stream(refresh_token, activity_id)
+#     stream = analysis.activity_stream(refresh_token, activity_id)
 
-    fastest_km_time = analysis.activity_fastest_km(stream[0], stream[1])
-    fastest_five_km_time = analysis.activity_fastest_five_km(stream[0], stream[1])
-    fastest_ten_km_time = analysis.activity_fastest_ten_km(stream[0], stream[1])
-    fastest_half_time = analysis.activity_fastest_half(stream[0], stream[1])
-    fastest_mara_time = analysis.activity_fastest_mara(stream[0], stream[1])
+#     fastest_km_time = analysis.activity_fastest_km(stream[0], stream[1])
+#     fastest_five_km_time = analysis.activity_fastest_five_km(stream[0], stream[1])
+#     fastest_ten_km_time = analysis.activity_fastest_ten_km(stream[0], stream[1])
+#     fastest_half_time = analysis.activity_fastest_half(stream[0], stream[1])
+#     fastest_mara_time = analysis.activity_fastest_mara(stream[0], stream[1])
 
-    fastest_times.append([str(activity_id), name, dates, kms, fastest_km_time, fastest_five_km_time, fastest_ten_km_time, fastest_half_time, fastest_mara_time])
+#     fastest_times.append([str(activity_id), name, dates, kms, fastest_km_time, fastest_five_km_time, fastest_ten_km_time, fastest_half_time, fastest_mara_time])
 
-df = pd.DataFrame(fastest_times, columns=['activity_id', 'name', 'date', 'kms', '1km', '5km', '10km', 'Half', 'Marathon'])
-df[['1km', '5km', '10km', 'Half', 'Marathon']] = df[['1km', '5km', '10km', 'Half', 'Marathon']].applymap(analysis.convertSecs)
-df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d').dt.date
+# df = pd.DataFrame(fastest_times, columns=['activity_id', 'name', 'date', 'kms', '1km', '5km', '10km', 'Half', 'Marathon'])
+# df[['1km', '5km', '10km', 'Half', 'Marathon']] = df[['1km', '5km', '10km', 'Half', 'Marathon']].applymap(analysis.convertSecs)
+# df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d').dt.date
+
+
+df = analysis.create_dataframe(activities)
+
 
 filtered_table = analysis.filter_activities_from_slider(df, slider)
 
