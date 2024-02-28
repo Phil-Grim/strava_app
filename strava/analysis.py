@@ -55,6 +55,19 @@ def get_activities(refresh_token,page=1):
     return run_activities
 
 
+def full_activity_list(refresh_token):
+    id = athlete_id(refresh_token)
+
+    total_runs = number_of_runs(refresh_token, id) 
+    num_pages = int(total_runs/200) + 1
+    activities = []
+    for i in range(num_pages):
+        page = i + 1
+        page_activities = get_activities(refresh_token, page)
+        activities.extend(page_activities)
+    return activities
+
+
 @st.cache_data(show_spinner=False)
 def activity_stream(refresh_token, activity_id):
     '''Returns stream of distance and time data for a given activity_id'''
@@ -263,7 +276,7 @@ def convertSecs(seconds):
 
 
 def activities_slider(activities):
-    # using min and max start date from get_activities output (the json of all strava activities for the user) 
+    '''using min and max start date from get_activities output'''
 
     min_date = datetime.date(datetime.strptime(activities[0]['start_date'][:10],'%Y-%m-%d'))
     max_date = datetime.date(datetime.strptime(activities[-1]['start_date'][:10],'%Y-%m-%d'))
@@ -278,5 +291,7 @@ def activities_slider(activities):
 
     return start_time
 
-#     min_date = datetime.date(datetime.strptime(activities[0]['start_date'][:10],'%Y-%m-%d'))
-#     max_date = datetime.date(datetime.strptime(activities[-1]['start_date'][:10],'%Y-%m-%d'))
+def filter_activities_from_slider(activities_df, start_time_slider):
+    '''filter the resulting dataframe based on a date slider'''
+    filtered_df = activities_df.loc[(activities_df['Date'] >= start_time_slider[0]) & (activities_df['Date'] <= start_time_slider[1])]
+    return filtered_df

@@ -32,15 +32,20 @@ st.markdown(
 
 refresh_token = authenticate.refresh_from_authentication(strava_auth)
 
-id = analysis.athlete_id(refresh_token)
-total_runs = analysis.number_of_runs(refresh_token, id) 
-num_pages = int(total_runs/200) + 1
-activities = []
-for i in range(num_pages):
-    page = i + 1
-    page_activities = analysis.get_activities(refresh_token, page)
-    activities.extend(page_activities)
-# st.json(activities) 
+# id = analysis.athlete_id(refresh_token)
+# total_runs = analysis.number_of_runs(refresh_token, id) 
+# num_pages = int(total_runs/200) + 1
+# activities = []
+# for i in range(num_pages):
+#     page = i + 1
+#     page_activities = analysis.get_activities(refresh_token, page)
+#     activities.extend(page_activities)
+# # st.json(activities) 
+
+# moved above function to analysis:
+activities = analysis.full_activity_list(refresh_token)
+    
+
     
 slider = analysis.activities_slider(activities)
 
@@ -48,7 +53,7 @@ fastest_times = []
 for i in activities[:30]:
     activity_id = i["id"]
     name = i["name"]
-    kms = i["distance"] / 1000
+    kms = round(i["distance"] / 1000, 2)
 
     stream = analysis.activity_stream(refresh_token, activity_id)
 
@@ -62,12 +67,22 @@ for i in activities[:30]:
 
 df = pd.DataFrame(fastest_times, columns=['activity_id', 'name', 'kms', '1km', '5km', '10km', 'Half', 'Marathon'])
 df[['1km', '5km', '10km', 'Half', 'Marathon']] = df[['1km', '5km', '10km', 'Half', 'Marathon']].applymap(analysis.convertSecs)
-st.dataframe(df)
+
+filtered_table = analysis.filter_activities_from_slider(df, slider)
+
+st.dataframe(
+    filtered_table, 
+    column_config={"Activity": st.column_config.LinkColumn(
+        display_text='\/activities\/(\d+)'
+    )
+                    },
+    hide_index=True
+)
 
 
 
-old_table = authenticate.convert_json_to_df(activities)
-st.dataframe(old_table)
+# old_table = authenticate.convert_json_to_df(activities)
+# st.dataframe(old_table)
 
 
 
