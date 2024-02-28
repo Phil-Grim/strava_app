@@ -9,7 +9,7 @@ st.set_page_config(
 
 strava_header = authenticate.header()
 strava_auth = authenticate.authentication(header=strava_header)
-st.write(strava_auth)
+# st.write(strava_auth)
 
 
 if strava_auth is None:

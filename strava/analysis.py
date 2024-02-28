@@ -304,7 +304,7 @@ def activities_slider(activities):
 def create_dataframe(activities, refresh_token):
     with st.spinner(f"Generating fastest splits for Strava activities"):
         rows = []
-        for i in activities[:100]:
+        for i in activities[:10]:
             activity_id = i["id"]
             activity_url = f'https://www.strava.com/activities/{activity_id}'
             name = i["name"]
