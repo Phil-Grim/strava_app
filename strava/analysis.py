@@ -35,7 +35,10 @@ def number_of_runs(refresh_token,id):
     return total_runs           
 
 @st.cache_data(show_spinner=False)
-def get_activities(refresh_token,page=1):
+def get_activities(refresh_token,total_runs, page=1):
+    '''Extracts one page of activities (200 activities)
+        The total_runs argument ensures that the function is run (and the cached result isn't returned) if another run
+        has been added to strava'''
     access_token = authenticate.access_from_refresh(refresh_token)
     response = httpx.get(
         url=f"{STRAVA_API_BASE_URL}/athlete/activities",
@@ -56,6 +59,7 @@ def get_activities(refresh_token,page=1):
 
 
 def full_activity_list(refresh_token):
+    # extracts the full list of activities
     id = athlete_id(refresh_token)
 
     total_runs = number_of_runs(refresh_token, id) 
@@ -63,7 +67,7 @@ def full_activity_list(refresh_token):
     activities = []
     for i in range(num_pages):
         page = i + 1
-        page_activities = get_activities(refresh_token, page)
+        page_activities = get_activities(refresh_token, total_runs, page)
         activities.extend(page_activities)
     return activities
 
