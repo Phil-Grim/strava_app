@@ -11,11 +11,6 @@ strava_header = authenticate.header()
 strava_auth = authenticate.authentication(header=strava_header)
 # st.write(strava_auth)
 
-
-if strava_auth is None:
-    st.warning('Please use the Connect with Strava button to login!')
-    st.stop()
-
 st.markdown(
     """
     # :runner: Strava Personal Best Viewer
@@ -24,6 +19,10 @@ st.markdown(
     
     The app implements the [Strava API](https://developers.strava.com/) OAuth2 authentication flow to allow viewers to see their indivudual personal bests."""
 )
+
+if strava_auth is None:
+    st.warning('Please use the Connect with Strava button to login!')
+    st.stop()
 
 
 refresh_token = authenticate.refresh_from_authentication(strava_auth)
@@ -41,8 +40,6 @@ with st.spinner(f"Generating fastest splits for Strava activities"):
     df = analysis.create_dataframe(activities, refresh_token)
     filtered_table = analysis.filter_activities_from_slider(df, slider)
 
-
-    # Can move this to a function too
     st.dataframe(
         filtered_table, 
         column_config={"Activity ID": st.column_config.LinkColumn(
@@ -56,8 +53,8 @@ with st.spinner(f"Generating fastest splits for Strava activities"):
 ## Optional Histogram, showing run distribution by distance for the time period the user selects with the slider   
 # st.header("Run Distribution by Distance (kms)")
 # analysis.run_length_histogram(filtered_table)
- 
-    
+
+
 # st.header("Headline Numbers")
 # distance = strava.adding_headline_numbers(filtered_table)
 # st.write('You ran', distance, 'kms during the specified date range')
