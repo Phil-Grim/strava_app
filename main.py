@@ -22,11 +22,6 @@ st.markdown(
 
 if strava_auth is None:
     st.warning('Please use the Connect with Strava button to login!')
-    st.image(
-        "static/app_demo.gif",
-        caption="Streamlit Activity Viewer demo",
-        use_column_width="always",
-    )
     st.stop()
 
 
