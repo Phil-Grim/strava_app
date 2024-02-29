@@ -1,4 +1,4 @@
-# strava_app
+# Strava Personal Best Viewer 
 
 This is a proof of concept application which shows users their 1km, 5km, 10km, half and marathon personal bests over a given time period.
 
