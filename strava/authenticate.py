@@ -7,7 +7,10 @@ from strava.constants import *
 
 
 def header():
-    '''adds 3 columns to the page, along with an empty container in the 3rd column'''
+    """
+    Function to add 3 columns to the page, along with an empty container in the 3rd column
+    """
+
     col1, col2, col3 = st.columns(3)
 
     with col3:
@@ -18,17 +21,20 @@ def header():
 
 @st.cache_data(show_spinner=False)
 def load_image_as_base64(image_path):
+    """
+    Function 
+    """
     with open(image_path, "rb") as f:
         contents = f.read()
     return base64.b64encode(contents).decode("utf-8")
 
 
-def powered_by_strava_logo():
-    base64_image = load_image_as_base64("./static/api_logo_pwrdBy_strava_horiz_light.png")
-    st.markdown(
-        f'<img src="data:image/png;base64,{base64_image}" width="100%" alt="powered by strava">',
-        unsafe_allow_html=True,
-    )
+# def powered_by_strava_logo():
+#     base64_image = load_image_as_base64("./static/api_logo_pwrdBy_strava_horiz_light.png")
+#     st.markdown(
+#         f'<img src="data:image/png;base64,{base64_image}" width="100%" alt="powered by strava">',
+#         unsafe_allow_html=True,
+#     )
 
 @st.cache_data(show_spinner=False)
 def authorization_url():
@@ -84,7 +90,8 @@ def logout_header(strava_auth, header=None):
         col1.markdown(f"*Welcome, {first_name} {last_name}!*") 
 
     with col2:
-        powered_by_strava_logo()
+        # powered_by_strava_logo()
+        st.image('static/api_logo_pwrdBy_strava_horiz_light.png')
 
     base.markdown(f'''
         <a target="_self" href={APP_URL}><button style="background-color:{STRAVA_ORANGE};">Log Out</button></a>
