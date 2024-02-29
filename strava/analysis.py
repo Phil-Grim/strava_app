@@ -3,6 +3,8 @@ import streamlit as st
 import numpy as np
 from datetime import datetime
 import pandas as pd
+from matplotlib import pyplot as plt
+from matplotlib.ticker import FormatStrFormatter
 
 from strava import authenticate
 from strava.constants import *
@@ -339,3 +341,43 @@ def filter_activities_from_slider(activities_df, start_time_slider):
 #     week_distance = round(activities_df['Distance (km)'].sum(), 1)
 #     return week_distance
 #     # make this recursive
+
+
+def run_length_histogram(dataframe):
+    fig, ax = plt.subplots()
+    ax.set_facecolor('#eafff5')
+
+    data = dataframe['Kms']
+    w=5
+    counts, bins, patches = ax.hist(data, bins=np.arange(0, max(data) + w, w), rwidth=1, facecolor='yellow', edgecolor='black')
+
+    ax.set_xticks(bins)
+    ax.xaxis.set_major_formatter(FormatStrFormatter('%0.1f'))
+    plt.xlabel('Kms per Run')
+    plt.ylabel('Count')
+    ax.xaxis.labelpad = 20
+
+    # Change the colors of bars at the edges...
+    twentyfifth, seventyfifth = np.percentile(data, [25, 75])
+    for patch, rightside, leftside in zip(patches, bins[1:], bins[:-1]): # the first rightside bin is at bins[1] and the last leftside patch is at bins[-1]
+        if rightside < twentyfifth:
+            patch.set_facecolor('green')
+        elif leftside > seventyfifth:
+            patch.set_facecolor('red')
+
+    # 2 lines to get y-coordinate for placement of raw count label
+    max_height = max([x.get_height() for x in patches]) # height of tallest histogram bin
+    label_placement = (max_height * 4/107) 
+
+    bin_centers = 0.5 * np.diff(bins) + bins[:-1]
+    for count, x, patch in zip(counts, bin_centers, patches):
+        # Label the raw counts
+        ax.annotate(str(count), xy=(x, 0), xycoords=('data', 'axes fraction'),
+            xytext=(0,patch.get_height() + label_placement), textcoords=('offset points', 'data'), va='top', ha='center')
+        
+        # Label the percentages
+        percent = '%0.0f%%' % (100 * float(count) / counts.sum())
+        ax.annotate(percent, xy=(x, 0), xycoords=('data', 'axes fraction'),
+            xytext=(0, -16), textcoords='offset points', va='top', ha='center')
+
+    return st.pyplot(fig)
