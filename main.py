@@ -44,7 +44,7 @@ with st.spinner(f"Generating fastest splits for Strava activities"):
         filtered_table, 
         column_config={"Activity ID": st.column_config.LinkColumn(
             # display_text='\/activities\/(\d+)'
-            display_test='View on Strava'
+            display_text='View on Strava'
         )
                         },
         hide_index=True
