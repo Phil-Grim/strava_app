@@ -429,7 +429,7 @@ def create_dataframe(activities, refresh_token):
 
         rows.append([activity_url, name, dates, kms, moving_time, fastest_km_time, fastest_five_km_time, fastest_ten_km_time, fastest_half_time, fastest_mara_time])
 
-    df = pd.DataFrame(rows, columns=['Activity ID', 'Name', 'Date', 'Kms', 'Moving Time', '1km', '5km', '10km', 'Half Marathon', 'Marathon'])
+    df = pd.DataFrame(rows, columns=['Link to Activity', 'Name', 'Date', 'Kms', 'Moving Time', '1km', '5km', '10km', 'Half Marathon', 'Marathon'])
     df[['Moving Time', '1km', '5km', '10km', 'Half Marathon', 'Marathon']] = df[['Moving Time', '1km', '5km', '10km', 'Half Marathon', 'Marathon']].applymap(convertSecs)
     df['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d').dt.date
     return df 
